@@ -1,18 +1,22 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+#-*- coding:utf8 -*-
 
-import time
-import sys, random
+from pyswip.prolog import Prolog
+from pyswip.easy import *
+PROLOG_FILE = "tangram.pl"
 
-from pl_launcher import start_script
-from PyQt4 import QtGui, QtCore
-from interface import *
+def solve():
+    prolog.consult(PROLOG_FILE)
+    shapes = "coucou"
+    draw = "banane"
+
+    result = list(prolog.query("L=%s,D=%s, tangram(L,D,A)" %(shapes,draw)))
+    print result
 
 def main():
-    app = QtGui.QApplication(sys.argv)
-    interface = ShapesBase()
-    interface.show()
-    app.exec_()
+    solve()
 
 if __name__ == "__main__":
+    prolog = Prolog()
     main()
 
