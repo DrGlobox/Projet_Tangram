@@ -3,12 +3,4 @@ Projet_Tangram
 
 [IA41] Projet Tangram 
 
-Install:
-
-    /LIB : pyswip
-    www : PyQt
-    
-doc PyQt:
-
-    http://nullege.com/codes/search/PyQt4.QtGui
-    http://harmattan-dev.nokia.com/docs/library/html/qt4/
+Ok bon on va continuer de tester le pyswip, mais pour le moment problème de setg fault sur les ordinateur 64 bits. 
