@@ -23,12 +23,11 @@
 %[[0,0]    ,[100,0]  ,[50,50]           ] % GROS TRIANGLE #1
 %[[0,0]    ,[0,100]  ,[50,50]           ] % GROS TRIANGLE #2
 %]
-
+%
 
 
 
 
 %tangram(+Shapes, +Draws, -Result)  avec Shapes, Draw et Result liste de Liste de point
 tangram([],_,[]).
-tangram([Shape|Rest],Draw,NewResult):-
-    tangram(Rest,Draw,Result).
+tangram([Shape|Rest],Draw,Result):- tangram(Rest,Draw,Result).
