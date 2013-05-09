@@ -11,7 +11,7 @@
 %]
 %
 %DRAW = [
-% [0,0],[100,0],[100,100],[0,100]
+%   [[0,0],[100,0],[100,100],[0,100]]
 %]
 %
 %RESULT = [
@@ -28,6 +28,20 @@
 
 
 
-%tangram(+Shapes, +Draws, -Result)  avec Shapes, Draw et Result liste de Liste de point
+%tangram(+Shapes, +Draws, -Result)  avec Shapes, Draw et Result liste de Listes de points
+%                                   Les figures sont trié (comme dans l'exemple) du moins complexe
+%                                   au plus complexe à placer.
 tangram([],_,[]).
-tangram([Shape|Rest],Draw,Result):- tangram(Rest,Draw,Result).
+tangram([Shape|Rest],Draw,NewResult):- 
+    tangram(Rest,Draw,Result), 
+    resultDraw(Draw,Result,DrawResult).
+
+
+%resultDraw(+Draws,+Result,-DrawResult)  avec Draw,Result,DrawResult liste de listes de points
+%                                       Le predicat est vrai dit DrawResult est la figure formée a
+%                                       partir de Draw sans les morceaux contenus dans Result
+resultDraw(Draws,[],Draws):-!.
+resultDraw([],_,[]).
+resultDraw([Draw|Rest],Result,DrawResult).
+    
+
