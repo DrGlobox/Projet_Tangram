@@ -32,9 +32,9 @@
 %                                   Les figures sont trié (comme dans l'exemple) du moins complexe
 %                                   au plus complexe à placer.
 tangram([],_,[]).
-tangram([Shape|Rest],Draw,NewResult):- 
-    tangram(Rest,Draw,Result), 
-    resultDraw(Draw,Result,DrawResult).
+tangram([Shape|Rest],Draw,Result):- 
+    tangram(Rest,Draw,Result).
+    %resultDraw(Draw,Result,DrawResult).
 
 
 %resultDraw(+Draws,+Result,-DrawResult)  avec Draw,Result,DrawResult liste de listes de points
