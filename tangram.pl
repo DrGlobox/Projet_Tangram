@@ -1,6 +1,6 @@
 %
 %Exemple de résultat possible
-%SHAPES = [
+%FIGURES = [
 %[[0,0] ,[50,0]   ,[25,25]          ] % PETIT TRIANGLE #1
 %[[0,0] ,[50,0]   ,[25,25]          ] % PETIT TRIANGLE #2
 %[[0,0] ,[25,0]   ,[25,25]  ,[0,25] ] % CARRE
@@ -10,11 +10,11 @@
 %[[0,0] ,[100,0]  ,[50,50]          ] % GROS TRIANGLE #2
 %]
 %
-%DRAW = [
+%DESSINS = [
 %   [[0,0],[100,0],[100,100],[0,100]]
 %]
 %
-%RESULT = [
+%RESULTAT = [
 %[[100,0]  ,[75,25]  ,[100,50]          ] % PETIT TRIANGLE #1
 %[[50,50]  ,[25,75]  ,[75, 75]          ] % PETIT TRIANGLE #2
 %[[50,50]  ,[75,25]  ,[100,50]  ,[75,75]] % CARRE
@@ -28,20 +28,39 @@
 
 
 
-%tangram(+Shapes, +Draws, -Result)  avec Shapes, Draw et Result liste de Listes de points
+%tangram(+Figures, +Dessins, -Resultat)  avec Figures, Dessin et Resultat liste de Listes de points
 %                                   Les figures sont trié (comme dans l'exemple) du moins complexe
 %                                   au plus complexe à placer.
 tangram([],_,[]).
-tangram([Shape|Rest],Draw,Result):- 
-    tangram(Rest,Draw,Result).
-    %resultDraw(Draw,Result,DrawResult).
+tangram([Figure|Rest],Dessin,[FigurePosition|FiguresPositions]):- 
+    tangram(Rest,Dessin,FiguresPositions),
+    dessinsResultant(Dessin,FiguresPositions,DessinFiguresPositionnees),
+    placeFigure(Figure,DessinFiguresPositionnees,FigurePosition).
 
 
-%resultDraw(+Draws,+Result,-DrawResult)  avec Draw,Result,DrawResult liste de listes de points
-%                                       Le predicat est vrai dit DrawResult est la figure formée a
-%                                       partir de Draw sans les morceaux contenus dans Result
-resultDraw(Draws,[],Draws):-!.
-resultDraw([],_,[]).
-resultDraw([Draw|Rest],Result,DrawResult).
+%dessinsResultant(+Dessins,+FiguresPositions,-DessinResult): 
+%                               avec Dessin,FiguresPositions,DessinResult liste de listes de points
+%                               Le predicat est vrai si DessinResult est la figure formée a
+%                               partir de Dessin sans les morceaux contenus dans FiguresPositions
+dessinsResultant(Dessins,[],Dessins):-!.
+dessinsResultant([],_,[]).
+dessinsResultant([Dessin|Rest],FiguresPositions,DessinResult):-
+    dessinsResultant(Rest,FiguresPositions,DessinResult).
     
+
+%placeFigure(+Figure,+DessinFiguresPositionnees,-FigurePosition)
+%                               avec Figure et FigurePosition listes de points
+%                               et DessinFiguresPositionnees Liste de listes de points
+%                               Le predicat est vrai si FigurePosition est une position acceptable
+%                               de Figure dans DessinFiguresPositionnees.
+placeFigure([],_,[]).
+placeFigure(_,_,_).
+
+
+
+
+
+
+
+
 
