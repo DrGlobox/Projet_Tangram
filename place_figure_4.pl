@@ -46,13 +46,66 @@ aretes_figure([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Res
 aretes_dessin([],[]).
 aretes_dessin([Dessin|Reste],[Aretes|Resutat]):-aretes_dessin(Reste,Resutat), aretes_figure(Dessin,Aretes).
 
+%rotation_figure(Points, Origine, Angle, Points_tournes)
+%                   avec Points liste de point et Angle entier en radian et Points_tournes
+%                   le prédicat execute une rotation Angle sur la figures représenter par Point par
+%                   rapport a son point Origine
+rotation_figure([], _, _,[]):-!.
 
-%member(X,[X|T]). 
-%member(X,[_|T]):- member(X,T). 
+rotation_figure([Origine|Reste], Origine, Angle,[Origine|Retour]):- 
+    !, rotation_figure(Reste,Origine,Angle,Retour).
 
-place_figure(Figure,Dessins,Placement):-
+rotation_figure([Point|Reste], Origine, Angle,[Point_tourne|Retour]):-
+    rotation_figure(Reste,Origine,Angle,Retour),
+    rotation_point(Point,Origine,Angle,Point_tourne).
+
+
+%rotation_point(Point, Origine,Angle,Point_tourne)
+%                   rotation du point Point d'angle Angle autour du centre Origin
+rotation_point([Xp,Yp],[Xo,Yo],Angle,[Xr,Yr]):-
+    distance([Xp,Yp],[Xo,Yo],D),
+    CosAngle is cos(Angle), SinAngle is sin(Angle),
+    Xr is (D*CosAngle+ Xo),
+    Yr is (D*SinAngle+ Yo).
+
+
+%points_figure(gros_triangle,T),translation_figure(T,[1,1],N).
+translation_figure([],_,[]).
+translation_figure([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
+    translation_figure(Reste,[Ax,Ay],Resultat),
+    Ptx is Pox + Ax, Pty is Poy + Ay.
+
+
+%%%%A COMPLETER
+symetrie_figure([],_,[]).
+symetrie_figure([Po|Reste],[Po,Po2],[Po|Resultat]):-
+    !,symetrie_figure(Reste,[Po,Po2],Resultat).
+symetrie_figure([Po|Reste],[Po2,Po],[Po|Resultat]):-
+    !,symetrie_figure(Reste,[Po2,Po],Resultat).
+symetrie_figure([Point|Reste],[Po1,Po2],[Po|Resultat]).
+
+
+
+%faire le cas avec une symétrie axiale
+place_figure(PointFigure,[[[Pox,Poy],_],[[Pfx,Pfy],_]],NewPointFigure):-
+    Ax is Pfx - Pox, Ay is Pfy - Poy,write(Ax),write(Ay),
+    translation_figure(PointFigure,[Ax,Ay],NewPointFigure).
+
+%place_figure([Po|Reste],[[[Pox,Poy],_],[[Pfx,Pfy],_]],NewPointFigure):-
+%    Ax is Pfx - Pox, Ay is Pfy - Poy,
+%    rotation_figure([Po|Reste],Po,pi,PointFigure),
+%    translation_figure(PointFigure,[Ax,Ay],NewPointFigure).
+
+
+
+
+
+
+
+%Le predicat retour une liste composé de l'arete et du placement interessant
+%points_figure(gros_triangle,Triangle),points_dessin(carre,Carre),teste_figure(Triangle,Carre,Placement).
+teste_figure(Figure,Dessins,Placement):-
     iter_dessin(Figure,Dessins,Placement).
-                  
 
 iter_dessin(_,[],_).
 iter_dessin(Figure,[Dessin|_],Placement):- 
@@ -68,8 +121,8 @@ iter_aretes_dessin(Figure,[Arete|_],Placement):-
 iter_aretes_dessin(Figure,[_|Reste],Placement):-
     iter_aretes_dessin(Figure,Reste,Placement).
 
-iter_figure([[Pf1,Pf2]|_],[Pd1,Pd2],[Pd1,Pd2]):-  
-    distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Df.
+iter_figure([[Pf1,Pf2]|_],[Pd1,Pd2],[[Pf1,Pf2],[Pd1,Pd2]]):-  
+    distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Dd.
 iter_figure([_|ResteFigure],AreteDessin,Placement):-
     iter_figure(ResteFigure,AreteDessin,Placement).
 
