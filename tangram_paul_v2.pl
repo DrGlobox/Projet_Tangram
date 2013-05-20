@@ -20,8 +20,9 @@ figures_tangram([petit_triangle,petit_triangle,moyen_triangle,carre,parallelogra
 
 
 %dessin(?D) avec D : expression représentant les dessin existant
+%                   Attention les dessin sont une liste de liste de figure 
 dessin(dessin_carre).
-points_dessin(dessin_carre,  [[0,0] ,[100,0] ,[100,100] ,[0,100]]).
+points_dessin(dessin_carre,  [[[0,0] ,[100,0] ,[100,100] ,[0,100]]]).
 
 
 %solve_tangram

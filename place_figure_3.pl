@@ -19,8 +19,9 @@ figures_tangram([petit_triangle,petit_triangle,moyen_triangle,carre,parallelogra
 
 
 %dessin(?D) avec D : expression représentant les dessin existant
-dessin(dessin_carre).
-points_dessin(dessin_carre,  [[0,0] ,[100,0] ,[100,100] ,[0,100]]).
+%                   Attention les dessin sont une liste de liste de figure 
+dessin(carre).
+points_dessin(carre,  [[[0,0] ,[100,0] ,[100,100] ,[0,100]]]).
 
 
 %pow(Nombre,Puissance,Resultat).
@@ -38,6 +39,52 @@ distance([Xp,Yp],[Xo,Yo],D):-
 dernier([Dernier],Dernier):-!.
 dernier([_|Reste],Dernier):-dernier(Reste,Dernier).
 
-aretes2([_],[]):-!.
-aretes2([T1,T2|Reste],[[T1,T2]|Aretes]):-aretes2([T2|Reste],Aretes).
-aretes([T|Reste],[[T,D]|Aretes]):-aretes2([T|Reste],Aretes),dernier([T|Reste],D).
+aretes([_],[]):-!.
+aretes([T1,T2|Reste],[[T1,T2]|Aretes]):-aretes([T2|Reste],Aretes).
+aretes_figure([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Reste],D).
+
+aretes_dessin([],[]).
+aretes_dessin([Dessin|Reste],[Aretes|Resutat]):-aretes_dessin(Reste,Resutat), aretes_figure(Dessin,Aretes).
+
+
+%member(X,[X|T]). 
+%member(X,[_|T]):- member(X,T). 
+
+place_figure(Figure,Dessins,Placement):-
+    iter_dessin(Figure,Dessins,Placement).
+                  
+
+iter_dessin(_,[],_).
+iter_dessin(Figure,[Dessin|_],Placement):- 
+    aretes_figure(Dessin,AretesDessin), 
+    iter_aretes_dessin(Figure,AretesDessin,Placement).
+iter_dessin(Figure,[_|Reste],Placement):- 
+    iter_dessin(Figure,Reste,Placement).
+
+iter_aretes_dessin(_,[],_).
+iter_aretes_dessin(Figure,[Arete|_],Placement):-
+    aretes_figure(Figure,AretesFigure),
+    iter_figure(AretesFigure,Arete,Placement).
+iter_aretes_dessin(Figure,[_|Reste],Placement):-
+    iter_aretes_dessin(Figure,Reste,Placement).
+
+iter_figure([[Pf1,Pf2]|_],[Pd1,Pd2],[Pd1,Pd2]):-  
+    distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Df.
+iter_figure([_|ResteFigure],AreteDessin,Placement):-
+    iter_figure(ResteFigure,AreteDessin,Placement).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
