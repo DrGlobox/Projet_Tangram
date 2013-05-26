@@ -76,36 +76,48 @@ translation_figure([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
     Ptx is Pox + Ax, Pty is Poy + Ay.
 
 
-%%%%A COMPLETER
 symetrie_figure([],_,[]).
-symetrie_figure([Po|Reste],[Po,Po2],[Po|Resultat]):-
-    !,symetrie_figure(Reste,[Po,Po2],Resultat).
-symetrie_figure([Po|Reste],[Po2,Po],[Po|Resultat]):-
-    !,symetrie_figure(Reste,[Po2,Po],Resultat).
-symetrie_figure([Point|Reste],[Po1,Po2],[Po|Resultat]).
+symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
+    symetrie_figure(Reste,[[PAx,PAy],[PBx,PBy]],Resultat),
+    POx = (PAx + PBx)/2.0, POy = (PAy + PBy)/2.0,
+    Pnx =  POy - Py, Pny = POx - Px.
+    
 
-
-
-%faire le cas avec une symétrie axiale
 place_figure(PointFigure,[[[Pox,Poy],_],[[Pfx,Pfy],_]],NewPointFigure):-
-    Ax is Pfx - Pox, Ay is Pfy - Poy,write(Ax),write(Ay),
+    Ax is Pfx - Pox, Ay is Pfy - Poy,
     translation_figure(PointFigure,[Ax,Ay],NewPointFigure).
 
-%place_figure([Po|Reste],[[[Pox,Poy],_],[[Pfx,Pfy],_]],NewPointFigure):-
-%    Ax is Pfx - Pox, Ay is Pfy - Poy,
-%    rotation_figure([Po|Reste],Po,pi,PointFigure),
-%    translation_figure(PointFigure,[Ax,Ay],NewPointFigure).
 
+%La fonction sens placement retour le sens de la figure 
+% -1 est le sens symétrique
+%  1 est le sens normale 
+sensPlacement([_],[],0):-!.
+sensPlacement(Placement,[_|Reste],Result):-
+    sensPlacement(Placement,Reste,Result), Result =\= 0,!.
+sensPlacement([_,Arete],[Dessin|_],Result):-
+    sensPlacement2(Arete,Dessin,Result),Result =\= 2,!.
+sensPlacement([_,[_,Po]],[[Pn|_]|_],Result):-
+    sensPlacement3(Po,Pn,Result).
 
+sensPlacement2(_,[_],2):-!.
+sensPlacement2([_,Po],[Po,Pn|_],Result):-!,
+    sensPlacement3(Po,Pn,Result).
+sensPlacement2(Arete,[_|Reste],Result):-
+    sensPlacement2(Arete,Reste,Result).
 
-
-
-
+sensPlacement3([X1,_],[X2,_],1):- X1 < X2,!.
+sensPlacement3([X1,_],[X2,_],-1):- X1 > X2,!.
+sensPlacement3([_,Y1],[_,Y2],1):- Y1 < Y2,!.
+sensPlacement3([_,Y1],[_,Y2],-1):- Y1 > Y2,!.
+     
 
 %Le predicat retour une liste composé de l'arete et du placement interessant
 %points_figure(gros_triangle,Triangle),points_dessin(carre,Carre),teste_figure(Triangle,Carre,Placement).
-teste_figure(Figure,Dessins,Placement):-
-    iter_dessin(Figure,Dessins,Placement).
+teste_figure(Figure,Dessins,NewFigure):-
+    iter_dessin(Figure,Dessins,Placement),
+    points_dessin(Dessins,PointDessins),
+    sensPlacement(Placement,PointDessins,Sens),
+    place_figure(Figure,Placement,NewFigure).
 
 iter_dessin(_,[],_).
 iter_dessin(Figure,[Dessin|_],Placement):- 
@@ -125,19 +137,4 @@ iter_figure([[Pf1,Pf2]|_],[Pd1,Pd2],[[Pf1,Pf2],[Pd1,Pd2]]):-
     distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Dd.
 iter_figure([_|ResteFigure],AreteDessin,Placement):-
     iter_figure(ResteFigure,AreteDessin,Placement).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
