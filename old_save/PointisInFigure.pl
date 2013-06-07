@@ -98,6 +98,7 @@ test6(_, _, Cross, Cross).
 
 % Prédicat calculYc(+Yl, +Xl, +Yr, +Xr, +Ax, ?Yc).
 % Calcule la valeur de Yc
+calculYc(_, X, _, X, _, 99999):-!.
 calculYc(Yl, Xl, Yr, Xr, Ax, Yc) :-
     Yc is Yl + (((Yr - Yl) / (Xr - Xl)) * (Ax - Xl)).
 
