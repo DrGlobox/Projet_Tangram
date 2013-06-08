@@ -1,4 +1,8 @@
-:- module(tools, [pow/3,distance/3,dernier/2,premier/2,aretes/2,aretes_dessin/2]).
+:- module(tools, [pow/3,distance/3,dernier/2,premier/2,aretes/2,aretes_dessin/2,membre/2]).
+
+:- (   stream_property(user_output, tty(true))
+   ->  load_files(library(ansi_term), [silent(true)])
+   ;   true).
 
 %pow(+Nombre,+Puissance,?Resultat).
 %   eleve un nombre a la puissance désiré
@@ -33,4 +37,5 @@ aretes_figure([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Res
 aretes_dessin([],[]).
 aretes_dessin([Dessin|Reste],[Aretes|Resutat]):-aretes_dessin(Reste,Resutat), aretes_figure(Dessin,Aretes).
 
-
+membre(X,[X|_]):-!.
+membre(X,[_|R]):-membre(X,R).
