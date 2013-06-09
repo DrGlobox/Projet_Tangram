@@ -46,6 +46,57 @@ test_figure_arete_dessin_exacte_match([[Pf1,Pf2]|_],[Pd1,Pd2],[[Pf1,Pf2],[Pd1,Pd
     distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Dd.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%     Essaye de trouver un placement par angle
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%test_placement_dessins_exact_match permet d'iteré tous les figures qui compose le dessin
+test_placement_dessins_angle_match(_,[],_):-fail.
+test_placement_dessins_angle_match(Figure,[Dessin|_],Placement):- 
+    tools:aretes_figure(Dessin,AretesDessin), 
+    tools:aretes_figure(Figure,AretesFigure), 
+    tools:liste_all_couple_aretes(AretesDessin,CouplesAretesDessin),
+    tools:liste_all_couple_aretes(AretesFigure,CouplesAretesFigure),
+    test_aretes_dessin_angle_match(CouplesAretesFigure,CouplesAretesDessin,Placement).
+test_placement_dessins_angle_match(Figure,[_|Reste],Placement):- 
+    test_placement_dessins_angle_match(Figure,Reste,Placement).
+
+test_aretes_dessin_angle_match(_,[],_):-fail.
+test_aretes_dessin_angle_match(CouplesAretesFigure,[CoupleAretesDessin|_],Placement):-
+    test_figure_arete_dessin_angle_match(CouplesAretesFigure,CoupleAretesDessin,Placement).
+test_aretes_dessin_angle_match(CouplesAretesFigure,[_|ResteCouple],Placement):-
+    test_aretes_dessin_angle_match(CouplesAretesFigure,ResteCouple,Placement).
+
+test_figure_arete_dessin_angle_match([],_,_):-fail.
+test_figure_arete_dessin_angle_match([CoupleAretesFigure|_],CoupleAretesDessin,Placement):-
+    test_couple_angle_match(CoupleAretesFigure,CoupleAretesDessin,Placement).
+test_figure_arete_dessin_angle_match([_|ResteCouple],CoupleAretesDessin,Placement):-
+    test_figure_arete_dessin_angle_match(ResteCouple,CoupleAretesDessin,Placement).
+
+test_couple_angle_match([AreteF1,AreteF2],[AreteD1,AreteD2],Placement):-
+    tools:find_angle(AreteF1,AreteF2,Angle),
+    tools:find_angle(AreteD1,AreteD2,Angle),
+    test_combinaison_placement([AreteF2,AreteF2],[AreteD1,AreteD2],Placement).
+
+test_combinaison_placement([[PF2,PF1],[PF3,PF2]],[[PD1,PD2],[PD3,PD4]],Placement):-!,
+    test_combinaison_placement([[PF1,PF2],[PF2,PF3]],[[PD1,PD2],[PD3,PD4]],Placement),!.
+test_combinaison_placement([[PF1,PF2],[PF3,PF4]],[[PD2,PD1],[PD3,PD2]],Placement):-!,
+    test_combinaison_placement([[PF1,PF2],[PF3,PF4]],[[PD1,PD2],[PD2,PD3]],Placement),!.
+
+test_combinaison_placement([[PF1,PF2],[PF2,PF3]],[[PD1,PD2],[PD2,PD3]],[[PF2,PF3],[PD2,PD3]]):-
+    nl,nl,write([[PF1,PF2],[PF2,PF3]]),nl,
+    write([[PD1,PD2],[PD2,PD3]]),nl,
+    tools:distance(PF1,PF2,DF1_2),
+    tools:distance(PD1,PD2,DD1_2),
+    tools:distance(PF3,PF2,DF2_3),
+    tools:distance(PD3,PD2,DD2_3),
+    (DF1_2 < DD1_2, DF2_3 < DD2_3 ;
+     DF2_3 < DD1_2, DF1_2 < DD2_3 ),!.
+test_combinaison_placement(_,_,_):-fail.
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

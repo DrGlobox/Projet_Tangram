@@ -1,6 +1,6 @@
 :- module(tools, [pow/3,distance/3,dernier/2,premier/2,aretes/2,aretes_dessin/2,
                   membre/2,translate_figure/3,rotate_figure/4,find_angle/3,
-                  symetrie_figure/3
+                  symetrie_figure/3,liste_all_couple_aretes/2
                  ]
          ).
 
@@ -10,12 +10,12 @@
 
 %pow(+Nombre,+Puissance,?Resultat).
 %   eleve un nombre a la puissance désiré
-pow(_,0,1).
+pow(_,0,1):-!.
 pow(X,Y,Z) :- 
     Y1 is Y - 1, pow(X,Y1,Z1), Z is Z1*X.
 
 %distance(+Point1,+Point2,?D) 
-%   calcule la disance D entre 2 point 
+%   calcule la distance D entre 2 point 
 distance([Xp,Yp],[Xo,Yo],D):-
     XoXp = Xo-Xp,pow(XoXp,2,XoXp2),
     YoYp = Yo-Yp,pow(YoYp,2,YoYp2),
@@ -135,4 +135,19 @@ symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
     symetrie_figure(Reste,[[PAx,PAy],[PBx,PBy]],Resultat),
     symetrie([Px,Py],[[PAx,PAy],[PBx,PBy]],[Pnx,Pny]).
 
- 
+
+
+
+
+liste_all_couple_aretes(AretesDessin,CouplesAretes):-
+    getListeCoupleAretes(AretesDessin,CouplesAretes).
+
+getListeCoupleAretes(AretesDessin,[[Dernier,Premier]|ListeReturn]):-
+    getCoupleAretes(AretesDessin,ListeReturn),
+    premier(AretesDessin,Premier),dernier(AretesDessin,Dernier).
+
+getCoupleAretes([Arete1,Arete2],[Arete1,Arete2]):-!.
+getCoupleAretes([Arete1,Arete2|Rest],[[Arete1,Arete2]|ListeReturn]):-
+    getCoupleAretes([Arete2|Rest],ListeReturn).
+
+
