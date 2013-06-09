@@ -8,7 +8,7 @@
 %       New_patterns la nouvelle liste des sous patterns obtenue 
 %par soustraction du deuxieme para au premier
 
-%soustraction([],_,[]):- !.
-%soustraction([[pt|restePat]],Forme,[[pt|resteNewPat]]):- not(member(pt, Forme)),soustraction([restePat], Forme, [resteNewPat]).
-%soustraction([pat],[pt|resteForme],[[pt|resteNewPat]]):- not(member(pt, Forme)), soustraction([pat], Forme, [resteNewPat]).
-%soustraction([[pt|restePat]], [pt|resteForme], [[pt|resteNewPat]]):-
+soustraction([],[],_):- !.
+soustraction([Pt|RPat],Forme,[Pt|RNewPat]):- not(member(Pt, Forme)), soustraction(RPat, Forme, RNewPat).
+soustraction(Pat,[Pt|RForme],[Pt|RNewPat]):- not(member(Pt, Pat)), soustraction(Pat, RForme, RNewPat).
+soustraction([Pt|RPat], [Pt|RForme], [Pt|RNewPat]):- soustraction(RPat, RForme, RNewPat).
