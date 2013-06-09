@@ -53,16 +53,17 @@ translation_figure([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
     translation_figure(Reste,[Ax,Ay],Resultat),
     Ptx is Pox + Ax, Pty is Poy + Ay.
 
-polaire([X,Y],[X,Oy],P2,D):-
-    P2 is pi / 2,
-    tools:distance([X,Y],[X,Oy],D),!.
+polaire([X,Y],[Ox,Y],Teta,D):-
+    X > Ox,!, Teta is 0,
+    tools:distance([X,Y],[Ox,Y],D).
+polaire([X,Y],[Ox,Y],Teta,D):-
+    X < Ox,!, Teta is pi,
+    tools:distance([X,Y],[Ox,Y],D).
 polaire([X,Y],[Ox,Oy],Teta,D):-
-    X - Ox < 0,!,
     tools:distance([X,Y],[Ox,Oy],D),
-    Teta is atan( (Y-Oy) / (Ox-X)) + pi/2.
-polaire([X,Y],[Ox,Oy],Teta,D):-
-    tools:distance([X,Y],[Ox,Oy],D),
-    Teta is atan( (Y-Oy) / (X-Ox) ).
+    Nx is X - Ox, Ny is Y - Oy,
+    Tmp is (Nx  + sqrt( (Nx*Nx) + (Ny*Ny) )),
+    Teta is 2 * atan( Ny / Tmp).
 
 unpolaire([X,Y],[Ox,Oy],Teta,D):-
     X is round(D * cos(Teta) + Ox),
@@ -102,8 +103,7 @@ symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
 placeFigure(Figure,Dessins,ReturnFigure):-
     iter_dessin(Figure,Dessins,Placement),
     positionne(Figure,Placement,NewFigure),
-    test_all_placement(NewFigure,Dessins,Placement,ReturnFigure),!.
-placeFigure(_,_,_):-fail.
+    test_all_placement(NewFigure,Dessins,Placement,ReturnFigure).
 
 
 test_all_placement(Figure,Dessins,_,Figure):-
@@ -164,6 +164,3 @@ iter_figure([[Pf1,Pf2]|_],[Pd1,Pd2],[[Pf1,Pf2],[Pd1,Pd2]]):-
     distance(Pf1,Pf2,Df), distance(Pd1,Pd2,Dd), Df == Dd.
 
 
-
-
-%% PROBLEME : Ne retourne qu'une seul valeur sur les 4 ... probleme de fail certainement
