@@ -9,9 +9,7 @@ pow(X,Y,Z) :-
 %distance(+Point1,+Point2,?D) 
 %   calcule la disance D entre 2 point 
 distance([Xp,Yp],[Xo,Yo],D):-
-    XoXp = Xo-Xp,pow(XoXp,2,XoXp2),
-    YoYp = Yo-Yp,pow(YoYp,2,YoYp2),
-    D is sqrt(XoXp2 + YoYp2),!.
+	D is sqrt( (Xo - Xp)**2 + (Yo - Yp)**2 ), !.
 
 %dernier(+List,-Dernier)
 % la fonction retour le dernier element de le liste
