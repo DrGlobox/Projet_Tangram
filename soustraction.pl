@@ -1,3 +1,4 @@
+:-module(soustraction, [soustraction/3]).
 :-use_module(tools).
 :-use_module(tangram).
 
