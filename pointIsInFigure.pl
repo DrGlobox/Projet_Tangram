@@ -1,15 +1,17 @@
 :- module(pointIsInFigure, [pointIsInFigure/3]).
+:-use_module(tools).
 
 %pointIsInFigure(Point,Points,FinalOdd):- 
 %           Point = [X,Y]
 %           Points = List of Point
 %           FinalOdd = Boolean
+pointIsInFigure(Point,Points,1):-
+    tools:membre(Point,Points),!. 
 pointIsInFigure(Point,Points,FinalOdd):- 
     nbPoint(Points,Nb),
     J is Nb-1,
     Odd is 0,
-    iterate(0,Nb,J,Point,Points,Odd,FinalOdd)
-    .
+    iterate(0,Nb,J,Point,Points,Odd,FinalOdd).
 
 
 iterate(Nb,Nb,_,_,_,Odd,Odd):-!.
