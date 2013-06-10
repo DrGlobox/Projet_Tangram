@@ -7,6 +7,7 @@ Utilisation
 ===========
 
 ```
+swipl -s main.pl
 main(Dessin, Resultat).
 ```
 

@@ -25,20 +25,22 @@ main(Dessin, PiecesRetenues) :-
 % Essai de chaque pièce dans la liste
 % Pour ne pas faire d'itération inutile, on limite le compteur à 5
 % Si la pièce n'est plaçable nul part, on la place à la fin
-essai_piece([], [], _) :- !.
-essai_piece(_, [], N) :- N =:= 0, !.
+essai_piece([], [], _, _) :- !.
+essai_piece(_, _, _, 0) :- !.
 essai_piece([Piece|PiecesRestantes], Dessin, [Piece|PiecesRetenues], _) :-
 	points_figure(Piece, PointsPiece),
-	placeFigure(PointsPiece, Dessin, Placements), 
+	%write('Essai de la pièce '),
+	%write(Piece),
+	placeFigure(PointsPiece, Dessin, Placements),
 	retirer_piece(PiecesRestantes, Dessin, Placements, PiecesRetenues).
 essai_piece([PieceNonUtilisee|PiecesRestantes], Dessin, PiecesRetenues, N) :- 
 	append(PiecesRestantes, [PieceNonUtilisee], Pieces), N1 is N-1,
+	%write_ln(' -> la pièce est mise de côté pour le moment'),
 	essai_piece(Pieces, Dessin, PiecesRetenues, N1).
 	
 % Retrait de la pièce si on a pu la placer au moins une fois
 % Puis on réitère l'algo avec le nouveau dessin et les placements restants
-retirer_piece(Pieces, Dessin, [Placement|Placements], PiecesRetenues) :-
-	soustraction(Dessin, Placement, NouveauDessin),
-	essai_piece(Pieces, NouveauDessin, PiecesRetenues, 5),
-	retirer_piece(Dessin, Placements, PiecesRetenues).
-	
+retirer_piece(Pieces, [Dessin], Placements, PiecesRetenues) :-
+	soustraction(Dessin, Placements, NouveauDessin),
+	write_ln(' -> la pièce est placée avec succès, passage à la pièce suivante'),
+	essai_piece(Pieces, [NouveauDessin], PiecesRetenues, 5).

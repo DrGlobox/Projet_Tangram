@@ -1,6 +1,7 @@
 :- module(tangram, [figure/1, points_figure/2, figures_tangram/1]).
 
-%figure(?F) avec f : expression représentant une figure existante
+%figure(?F, +N) avec f : expression représentant une figure existante
+% et N la chaîne de caractères pour le nom affichable
 figure(gros_triangle).
 figure(moyen_triangle).
 figure(petit_triangle).
