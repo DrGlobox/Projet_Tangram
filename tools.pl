@@ -52,13 +52,10 @@ rotate_figure([Point|Reste], Origine, Angle,[Point_tourne|Retour]):-
 %rotate_point(Point, Origine,Angle,Point_tourne)
 %   rotation du point Point d'angle Angle autour du centre Origin
 rotate_point([Xp,Yp],[Xo,Yo],Angle,[Xr,Yr]):-
-    CosAngle is cos(Angle), SinAngle is sin(Angle),
-    Xcos is ((Xp-Xo)*CosAngle),
-    Xsin is ((Xp-Xo)*SinAngle),
-    Ycos is ((Yp-Yo)*CosAngle),
-    Ysin is ((Yp-Yo)*SinAngle),
-    Xrr is  Xcos - Ysin + Xo,Xr is round(Xrr),
-    Yrr is  Xsin - Ycos + Yo,Yr is round(Yrr).
+    Sin is sin(Angle),Cos is cos(Angle),
+    X is Xp - Xo, Y is Yp - Yo,
+    Xrr is X * Cos - Y * Sin, Xr is round(Xrr+Xo),
+    Yrr is X * Sin + Y * Cos, Yr is round(Yrr+Yo).
 
 
 getAngleDegre(Radian, Degre):-
@@ -134,9 +131,6 @@ symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
     symetrie([Px,Py],[[PAx,PAy],[PBx,PBy]],[Pnx,Pny]).
 
 
-
-
-
 liste_all_couple_aretes(AretesDessin,CouplesAretes):-
     getListeCoupleAretes(AretesDessin,CouplesAretes).
 
@@ -144,8 +138,30 @@ getListeCoupleAretes(AretesDessin,[[Dernier,Premier]|ListeReturn]):-
     getCoupleAretes(AretesDessin,ListeReturn),
     premier(AretesDessin,Premier),dernier(AretesDessin,Dernier).
 
-getCoupleAretes([Arete1,Arete2],[Arete1,Arete2]):-!.
+getCoupleAretes([Arete1,Arete2],[[Arete1,Arete2]]):-!.
 getCoupleAretes([Arete1,Arete2|Rest],[[Arete1,Arete2]|ListeReturn]):-
     getCoupleAretes([Arete2|Rest],ListeReturn).
+
+
+
+find_good_axe_rotation([[PtF1A1,PtF2A1],[PtF1A2,PtF2A2]],[[PtD1A1,PtD2A1],[PtD1A2,PtD2A2]],Angle):-
+    distance(PtF1A1,PtF2A1,DF1), distance(PtF1A2,PtF2A2,DF2),
+    distance(PtD1A1,PtD2A1,DD1), distance(PtD1A2,PtD2A2,DD2),
+    DF1 =< DD1, DF2 =< DD2,!,
+    find_angle([PtF1A1,PtF2A1],[PtD1A1,PtD2A1],Angle).
+find_good_axe_rotation([[PtF1A1,PtF2A1],[PtF1A2,PtF2A2]],[[PtD1A1,PtD2A1],[PtD1A2,PtD2A2]],Angle):-
+    distance(PtF1A1,PtF2A1,DF1), distance(PtF1A2,PtF2A2,DF2),
+    distance(PtD1A1,PtD2A1,DD1), distance(PtD1A2,PtD2A2,DD2),
+    DF1 =< DD2, DF2 =< DD1,!,
+    find_angle([PtF1A1,PtF2A1],[PtD1A2,PtD2A2],Angle).
+find_good_axe_rotation(_,_,0).
+
+
+
+find_common_point([[X,Y],[_,_]],[[X,Y],[_,_]],[X,Y]):-!.
+find_common_point([[X,Y],[_,_]],[[_,_],[X,Y]],[X,Y]):-!.
+find_common_point([[_,_],[X,Y]],[[X,Y],[_,_]],[X,Y]):-!.
+find_common_point([[_,_],[X,Y]],[[_,_],[X,Y]],[X,Y]):-!.
+find_common_point(_,_,[0,0]).
 
 
