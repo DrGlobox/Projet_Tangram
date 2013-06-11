@@ -15,9 +15,9 @@ main(Dessin, Resultat).
 
 Treize dessins actuellement répertoriés, les solutions possibles (entre autre) sont celles-ci:
 
-[![Solutions possibles au Tangram](13tangram.png)][1]
+![Solutions possibles au Tangram](13tangram.png)
 
-[1]: https://en.wikipedia.org/wiki/Tangram#Number_of_configurations 	"Tangram - Wikipédia"
+[Source][https://en.wikipedia.org/wiki/Tangram#Number_of_configurations]	"Tangram - Wikipédia"
 
 ### Changelog
 
