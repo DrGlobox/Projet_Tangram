@@ -15,15 +15,17 @@ main(Dessin, PiecesRetenues) :-
 	dessin(Dessin), points_dessin(Dessin, PointsDessin),
 	figures_tangram(Pieces),
 	write_ln('\tProfondeur : 0'),
-	essai_piece(Pieces, PointsDessin, PiecesRetenues, 5).
+	essai_piece(Pieces, PointsDessin, PiecesRetenues, 5),
+	nl, write_ln('------------------------\nTime to get some results\n------------------------'),
+	affiche_resultat(PiecesRetenues).
 
 % Essai de chaque pièce dans la liste
 % Pour ne pas faire d'itération inutile, on limite le compteur à 5
 % Si la pièce n'est plaçable nul part, on la place à la fin
-essai_piece([], [], _, _) :- !.
+essai_piece([], _, _, _) :- !.
 essai_piece(_, _, _, 0) :- 
 	write_ln('\tBout de la branche atteint'), !, fail.
-essai_piece([Piece|PiecesRestantes], Dessin, [Piece|PiecesRetenues], _) :-
+essai_piece([Piece|PiecesRestantes], Dessin, [[Piece, Placements]|PiecesRetenues], _) :-
 	points_figure(Piece, PointsPiece),
 	write('Essai de la pièce '),
 	write(Piece),
@@ -42,3 +44,9 @@ retirer_piece(Pieces, Dessin, Placements, PiecesRetenues) :-
 	write('\tPlacement en '), write_ln(Placements),
 	write('\tProfondeur : '), length(Pieces, N), P is 7-N, write_ln(P),
 	essai_piece(Pieces, NouveauDessin, PiecesRetenues, 5).
+
+% Affichage de la solution finale (la grande classe quoi)
+affiche_resultat([]) :- !.
+affiche_resultat([[Piece, Coordonnees]|Reste]) :-
+	write(Piece), write(' \t-> \t'), write(Coordonnees), nl,
+	affiche_resultat(Reste).

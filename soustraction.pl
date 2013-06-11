@@ -24,7 +24,7 @@ soustraction([Patterns], Forme, [NewPatterns2]):-
 
 
 clean_first_last_double_point([A|Reste],Reste):-
-    dernier(Reste,A),!. 
+    dernier(Reste,A),!.
 clean_first_last_double_point(L,L).
 
 
@@ -39,8 +39,8 @@ arete_to_point2([A1,A2|Reste],[[X,Y]|Result]):-
 
 
 clean_double_point([],[]):-!.
-clean_double_point([A,A|Rest],[A|Result]):-!,
-    clean_double_point(Rest,Result).
+clean_double_point([A,A|Rest],Result):-!,
+    clean_double_point([A|Rest],Result).
 clean_double_point([A|Rest],[A|Result]):-
     clean_double_point(Rest,Result).
 
