@@ -17,7 +17,7 @@ Treize dessins actuellement répertoriés, les solutions possibles (entre autre)
 
 ![Solutions possibles au Tangram](13tangram.png)
 
-[Source][https://en.wikipedia.org/wiki/Tangram#Number_of_configurations]	"Tangram - Wikipédia"
+Source : https://en.wikipedia.org/wiki/Tangram#Number_of_configurations
 
 ### Changelog
 
