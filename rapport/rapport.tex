@@ -103,6 +103,57 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
 	
 	Une première analyse du tangram a permis de mettre à jour plusieurs sous-problèmes. Deux problèmes d'ordre mathématique ainsi qu'un problème d'intelligence artificielle pure ont ainsi été isolés. 
 	
+		\section{Placement de pièce dans un modèle}
+		
+		Le premier problème à résoudre est le placement d'une pièce dans un modèle. L'objectif de cette méthode est ainsi de renvoyer l'ensemble des positions possibles pour une pièce dans le modèle.\\
+		Pour le développement de cette méthode, l'analyse s'est faite sur la base du raisonnement humain. La première approche, la plus simple pour un humain, consiste à tester toutes les positions possibles que peut prendre une pièce.\\
+		Si cette approche par\^ait intéressante et rapide à effectuer par un cerveau humain, du point de vue de la programmation et donc de l'intelligence artificielle, cette méthode n'est pas très efficace, puisqu'elle implique de tester toutes les solutions.\\
+		Pour une résolution efficace, après étude de différentes possibilités, il est apparu qu'il était préférable de "coller" les pièces à une arête du modèle. Cependant, ce "matching" doit se faire d'une manière intelligente. \\
+		Le but est donc de chercher les points communs entre la pièce et le modèle afin de trouver un point ou une arête constituant la base du placement de la pièce. Le premier point commun possible entre la pièce et le modèle est la longueur d'une arête. En effet, les pièces du Tangram ayant chacune des caractéristiques différentes, si une arête du dessin coïncide avec une arête de la pièce, il y a de grandes chances pour que la pièce soit positionnée à cet endroit. 
+    
+    \begin{center}
+    \includegraphics[width=5cm]{place_figure_exacte_match}\\
+    \emph{Ici, on peut voir que le triangle a une arête qui coïncide exactement avec une arête du modèle.}\\
+    \end{center}
+
+    S'il est évident que cette méthode est efficace dans de nombreux cas, elle a ses limites: il se peut que lors de la résolution du Tangram, une arête du modèle corresponde à plusieurs pièces. Lors de ce type de configurations la première méthode est donc inefficace. 
+
+    \begin{center}
+    \includegraphics[width=5cm]{place_figure_probleme_exacte_match}\\
+    \emph{Un problème peut arriver si plusieurs pièces coïncident avec une arête.}\\
+    \end{center}
+
+    Un second point commun, qui va pouvoir résoudre le problème précédent, a été trouvé. Cette seconde caractéristique commune, utile pour la décision de placement de la pièce, est l'utilisation des angles de chaque pièce. Cette méthode n'est utilisée que lorsque la première méthode est inefficace. Il faut alors vérifier si un angle du modèle est égal à l'un des angles de la pièce. 
+
+    \begin{center}
+    \includegraphics[width=5cm]{place_figure_probleme_angle_match}\\
+    \emph{Dans ce cas, on remarque qu'aucune arête ne coïncide. La méthode des angles est donc appliquée et l'on trouve un angle égal.}\\
+    \end{center}
+
+    Une fois la base du placement de la pièce trouvée (le point où l'angle correspond entre pièce et modèle), on obtient soit une arête, soit un angle composé de deux arêtes. Il faut ensuite positionner la pièce en fonction de l'arête (ou des arêtes) à l'aide de translation(s) et rotation(s).\\
+    Cependant une fois la pièce correctement placée sur le modèle par rapport à la base, un problème important demeure. En effet, selon la rotation et le sens initiale de la pièce, celle-ci peut se trouver à l'inverse de la position voulue. 
+
+    \begin{center}
+    \includegraphics[width=5cm]{place_figure_probleme_symetrie_1}
+    \includegraphics[width=5cm]{place_figure_probleme_symetrie_2}\\
+    \emph{Dans les deux figures ci-dessus, la pièce doit être placée sur la surface verte. Cependant, dans certains cas, la méthode indique la surface rouge, dans le mauvais sens, donc.}
+    \end{center}
+
+	La validation (ou non) de la position de la pièce est donc le problème le plus important une fois la ou les arêtes communes trouvées entre le modèle et la pièce. Après l'obtention d'une position il faut vérifier si tous les sommets de la pièce font partie de la pièce afin de s'assurer qu'elle n'est pas positionnée dans le mauvais sens ou sur arête qui ne permet pas de placer entièrement la pièce. En effet, il ne faut pas que les pièces se superposent, ni qu'elle soient à l'extérieur du modèle.
+
+    \begin{center}
+    \includegraphics[width=5cm]{place_figure_probleme_point}\\
+    \emph{Ici, une arête coïncidente a bien été trouvée mais il n'y a pas la place pour que la pièce se place dans le modèle. Cette pièce peut alors soit être en dehors du modèle initial, soit sur une autre pièce (puisque notre méthode est récursive et que le modèle dans ce cas est une étape).}\\
+    \end{center}
+
+    Pour résoudre ce problème, un algorithme existant et assez complexe a été utilisé. Pour chaque sommet de la figure, le nombre d'arêtes ayant un point à la même hauteur que le sommet est compté. Dans le cas où un nombre impair de points de chaque coté de l'arête est trouvé, alors le point est à l'intérieur du modèle. Sinon, il se trouve à l'extérieur.\\
+    La source de l'algorithme est disponible à l'adresse suivante : \emph{http://alienryderflex.com/polygon/}\\ 
+
+    Après avoir testé l'ensemble des points de la pièce positionnée et ainsi que l'ensemble des points de son symétrique par rapport à l'arête de la base, l'une des pièces est identifiée comme étant en partie à l'extérieur du modèle.\\ \ \\
+
+    L'algorithme chargé de générer l'ensemble des placements possibles va donc pour une pièce et un modèle donnés, tenter de trouver les positions disponibles. Pour cela, la première méthode va être utilisée puis de la seconde. Dans le deux cas, la validité des résultats trouvés est vérifiée.\\
+    Dans le cas où aucun placement n'est possible (c'est à dire si le modèle est trop petit pour accueillir la pièce ou si aucun angle ni aucune arête ne convient), l'algorithme échoue.
+	
 		\section{Soustraction d'une forme au modèle}
 		
 		Le second problème mathématique que la résolution exigeait de résoudre est la soustraction d'une forme au modèle. En effet, la solution la plus simple résidait dans le fait de placer une forme dans le modèle pour ensuite renvoyer un nouveau problème et recommencer le casse-t\^ete la forme placée en moins avec le nouveau modèle.
@@ -125,3 +176,7 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
 	\tableofcontents
 		
 \end{document}
+
+
+
+
