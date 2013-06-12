@@ -72,8 +72,43 @@
 
     \paragraph{} Le prédicat chargé de générer l'ensemble des placements possibles va donc pour une
     pièce et une figures données, tenter de trouver les positions à l'aide de la première méthode
-    puis de la seconde et dans le deux cas va tester la validité des résultats trouvés.
-    Dans le cas où aucun placement n'est possible, c'est à dire si le pattern est trop petit pour
-    accueillir la pièce ou si aucun angle ni aucune arête ne convient le prédicat va échouer.
+    puis de la seconde et dans le deux cas va tester la validité des résultats trouvés.  Dans le cas
+    où aucun placement n'est possible, c'est à dire si le pattern est trop petit pour accueillir la
+    pièce ou si aucun angle ni aucune arête ne convient le prédicat va échouer.
+
+\newpage
+\section{Représentation des connaissances}
+    \subsection{Structures de données}
+
+        \paragraph{}Lors de la prise en main du projet, il nous a fallut trouver une structure
+        permettant de définir les pièces du Tangram ainsi que les différentes patterns. 
+        
+        \paragraph{}Après avoir envisagé plusieurs solutions nous avons décidé de représenter toutes
+        les figures dans un repère orthonormé où chaque point d'une figures est représenté par des
+        coordonnées X et Y.  Dans notre représentation Prolog un point est représenté par une liste
+        de deux éléments où le premier est la coordonnée en abscisse et le second celle en ordonnée.
+
+        \paragraph{}Comme en géométrie une figure est définie par une liste de points, en Prolog
+        notre représentation des figures se déroule de la même façon, les points sont ordonnées de
+        façon à ce que deux points l'un à coté de l'autre dans la liste forme une arête sur la
+        figure (le couple formé par le dernier élément ainsi que le premier représente également un
+        arête).
+
+        \paragraph{}Nos pièces sont donc représentées par des listes de points, chacune de ces
+        pièces ayant un point qui est positionné à l'origine du repère. Grâce à cette modélisation
+        lors du placement des pièces sur un pattern il suffira de transformer la figure par rotation
+        ou par translation vers sa position.
+
+        \paragraph{}Les Patterns sont un peu plus complexes car certains sont composés de plusieurs
+        figures. On a donc choisi de représenter un pattern par un liste de figures. De plus
+        comme on ne peut pas prévoir la position des pièces à l'avance, il est possible que le
+        positionnement d'une pièce dans le pattern forme deux sous patterns.
+
+
+        \begin{center}
+            \includegraphics[width=5cm]{representation_sousfigure}
+        \end{center}
+
+
 
 \end{document}
