@@ -1,0 +1,52 @@
+Description des variables d'états (informations) utilisées dans un état pour
+l'algorithme A* ou Min Max
+Description des machines à états finies implémentées
+Description de la hiérarchie de machines à états finies
+
+## Implémentation de la Depth First Search
+
+### Analyse de la recherche
+
+Le tangram est un jeu qui n'est pas représentable par un système de coût suivant
+le placement de chaque pièce. En effet, toutes les pièces doivent être placées,
+il n'y a donc pas de concurrence directe entre ces pièces, et même s'il était
+possible de mettre en place ce système de coût, il ne serait pas pertinent de le
+faire car les scores de chaque pièce seraient égaux.
+
+De plus, la recherche de solution dans ce problème est particulière, puisqu'il
+s'agit d'un arbre de recherche qui possède pour chaque noeud, différentes
+configurations possibles. Par exemple, dans le dessin du carré :
+
+* Sélection de la première pièce, un gros triangle
+* Celui-ci est positionnable sur le dessin, mais à plusieurs endroits
+* Ainsi, en plus d'avoir comme première branche le gros triangle, les branches
+enfants représentent chaque configuration possible du gros triangle
+* Pour chacune de ses branches, on essaye avec les pièces restantes, qui
+elles-même possèdent en sous-branche à nouveau leurs différentes configurations
+
+Ainsi, chaque profondeur est alternée par le choix d'une pièce puis ses
+différentes configurations. Cependant, si une pièce ne possède aucun placement
+disponible, elle apparaît quand même dans l'arbre, mais n'a aucun enfant. Si il
+est considéré qu'un niveau est constitué de deux profondeurs, c'est à dire d'une
+pièce ainsi que de ses configurations, une solution est trouvée lorsque la
+recherche atteint le niveau 7, correspondant au nombre de pièces composant le
+jeu du tangram.
+
+### Choix de la recherche
+
+Dans la recherche à effectuer, il est donc nécessaire de parcourir chaque
+branche jusqu'à sa fin. Comme une seule solution est souvent possible, ou une
+seule solution est nécessaire, il est plus pertinent de se diriger le plus
+rapidement vers la fin de chaque branche. Il faut donc exclure l'idée d'utiliser
+un algorithme parcourant en largeur l'arbre à construire, et plutôt se focaliser
+sur une recherche en profondeur.
+
+L'algorithme DFS, Depth First Search, est donc retenu. Il convient parfaitement
+à la situation puisqu'il étend le noeud du graphe et ses successeurs le plus
+longtemps possible jusqu'à atteindre le noeud but, ou jusqu'à atteindre un noeud
+n'ayant plus de fils. Dans ce cas, l'algorithme effectue du backtracking, et
+permet d'explorer les branches non-explorées. Si la recherche atteint un noeud
+but (c'est à dire que toutes les pièces ont pu être placé avec succès), on
+arrête la recherche là, puisqu'on a résolu le problème, et qua chercher une
+autre solution ne ferait que surcharger le programme.
+
