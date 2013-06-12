@@ -163,7 +163,24 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
 	
 	\chapter{Représentation informatique du problème}
 	
-	Le passage de la phase d'analyse à la phase "informatique" du pour la résolution du tangram s'avère beaucoup plus complexe que ce qui avait été prévu. Cependant, des représentations précises ont été adoptées.
+	Le passage de la phase d'analyse à la phase "informatique" du pour la résolution du tangram s'avère beaucoup plus complexe que ce qui avait été prévu. Cependant, des représentations précises ont été adoptées. Ces représentations se traduisent par des structures de données fixes qui ont été mises en place afin de mieux coordonner les différents prédicats Prolog.
+
+	    \section{Structures de données}
+
+        La structure majeure qui a dû être mise en place lors de l'implémentation du projet se doit de permettre la définition des pièces du Tangram ainsi que des différentes patterns.\\ \ \\ 
+        
+        Après avoir envisagé plusieurs solutions il a été décidé de représenter toutes les figures dans un repère orthonormé où chaque point d'une figure est représenté par deux coordonnées X et Y. \\
+        En ce qui concerne Prolog, un point est donc représenté par une liste de deux éléments où le premier est la coordonnée en abscisse (X) et le second celle en ordonnée (Y).\\
+		Comme en géométrie où une figure est définie par un ensemble de points, en Prolog, la représentation des figures se structure selon une liste de points, ces derniers étant ordonnés de façon à ce que deux points l'un à coté de l'autre dans la liste forment une arête sur la figure. Plus simplement, les points sont placés dans l'ordre. Bien entendu, le couple formé par le premier et le dernier point représente également une arête.\\
+		Les pièces sont donc représentées par des listes de points, chacune de ces pièces ayant un point qui est positionné à l'origine du repère. Grâce à cette modélisation, lors du placement des pièces sur un modèle, il suffira de transformer la figure par rotation ou par translation vers sa position.\\
+		Les modèles sont un peu plus complexes à modéliser car ils peuvent être divisés en plusieurs parties pour certaines configurations. Aussi, comme il n'est pas possible de prévoir la position des pièces à l'avance, il se peut que le positionnement d'une pièce dans le modèle forme deux nouveaux sous modèles. Il a donc été choisi de modéliser un modèle suivant une liste de figures. 
+
+
+        \begin{center}
+            \includegraphics[width=5cm]{representation_sousfigure}\\
+            \emph{Dans le cas ci-dessus, on remarque que le placement du carré dans le modèle fait passer celui-ci d'une partie à deux en sortie de l'algorithme de soustraction d'une pièce à un modèle.}
+        \end{center}
+
 	
 	\chapter{Résultats obtenus}
 	
