@@ -1,8 +1,3 @@
-Description des variables d'états (informations) utilisées dans un état pour
-l'algorithme A* ou Min Max
-Description des machines à états finies implémentées
-Description de la hiérarchie de machines à états finies
-
 ## Implémentation de la Depth First Search
 
 ### Analyse de la recherche
@@ -50,3 +45,94 @@ but (c'est à dire que toutes les pièces ont pu être placé avec succès), on
 arrête la recherche là, puisqu'on a résolu le problème, et qua chercher une
 autre solution ne ferait que surcharger le programme.
 
+### Espace d'états
+
+Les états sont ici composés de plusieurs éléments :
+
+* les pièces restantes à placer
+* les coordonnées représentant le dessin restant à trouver
+* les pièces déjà placées, ainsi que leurs coordonnées
+
+Il est possible donc de coder ces états comme suivant :
+`(Pieces, Dessin, PiecesPlacees)`
+
+`Pieces` est défini dans l'ensemble des Pièces disponibles pour résoudre le
+Tangram (soit 7 Pièces, donc 7 valeurs différentes). `PiecesPlacees` est défini
+de manière semblable, sauf que les coordonnées sont définies dans le plan défini
+par le dessin. `Dessin` est défini également dans le plan, ses valeurs ne
+pouvant aussi pas être plus petite ou plus grande que les différentes
+coordonnées composant le dessin de base. Il est important de noter que toutes 
+les coordonnées sont positives (définies dans le premier quart du repère).
+
+___Exemple pour les coordonnées :___ _Par exemple pour le dessin "carre", ses 
+coordonnées sont définies telles que `0=<X=<100` et `0=<Y=<100`_
+
+#### Exemple de différents états
+
+```
+Etat initial pour le dessin "carre" :
+(
+	(petit_triangle, gros_triangle, moyen_triangle, carre,	% Pieces 
+		parallelogramme, petit_triangle, gros_triangle),
+	((0, 0), (100, 0), (100, 100), (0, 100)),				% Dessin		
+	()														% PiecesPlacees
+)
+
+Etat intermédiaire :
+(
+	(petit_triangle, moyen_triangle, carre,					% Pieces 
+		parallelogramme, petit_triangle), 
+	((100, 0), (100, 100), (0, 100)),						% Dessin	   
+	(														% PiecesPlacees
+		(gros_triangle, 
+			((0, 0), (0, 100), (50, 50))
+		),
+		(gros_triangle, 
+			((0, 0), (100, 0), (50, 50))
+		)
+	)
+)
+
+Etat final :
+(
+	(),														% Pieces 
+	(),														% Dessin
+	(														% PiecesPlacees	   
+		(gros_triangle,
+			((0, 0), (0, 100), (50, 50))
+		),
+		(gros_triangle, 
+			((0, 0), (100, 0), (50, 50))
+		),
+		...,
+		(moyen_triangle,
+			((100, 50), (100, 100), (50, 100))
+		)
+	)
+)
+```
+
+### Système de production
+
+Les règles du système de production traitent des contraintes que les pièces
+placées doivent respecter, mais ne rentrent pas dans le déroulement de la
+recherche de placement des pièces. Il est cependant très difficile pour un
+problème de ce type de définir un ensemble de règles précises, puisque celles-ci
+diffèrent en fonction du dessin à résoudre. Les règles concernant les ensembles
+de définitions des coordonnées, sont les premières à être affectées par ce
+problème. Ainsi il est convenu d'adapter à chaque cas ces règles. De plus,
+Dessin évoluant constament, il n'est pas possible de définir ces règles, car
+elles vont évoluées en même temps que Dessin. Une règle simple __(R0)__ pour
+ceci peut être que chaque point d'une pièce dans PiecesPlacees à un état N doit
+être dans la surface de Dessin à un état N-1.
+
+Le reste des règles, plus simple à définir, est :
+
+* __(R1)__ Le nombre de Pieces est compris entre 0 et 7
+* __(R2)__ Le nombre de PiecesPlacees est compris entre 0 et 7
+* __(R3)__ L'aire du Dessin à un état N doit être égal à l'aire du Dessin à
+l'état N-1 moins l'aire de la dernière PiecesPlacees
+* __(R4)__ Dessin est vide si Pieces est vide et que le nombre de PiecesPlacees
+est égal à 7
+* __(R5)__ Le nombre de Pieces est égal à 7 moins le nombre de PiecesPlacees
+* __(R6)__ Le nombre de PiecesPlacees est égal à 7 moins le nombre de Pieces
