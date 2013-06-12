@@ -3,10 +3,6 @@
 :-use_module(tangram).
 :-use_module(pointIsInFigure).
 
-
-points_dessin(carre, [[[0,0], [100,0], [100,100], [0,100]]]).
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %     Retourne les positions de la figure dans le Dessin
@@ -14,15 +10,15 @@ points_dessin(carre, [[[0,0], [100,0], [100,100], [0,100]]]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 placeFigure(Figure,Dessins,ReturnFigure):-
+%write(Dessins), nl,
     test_placement_dessins_exact_match(Figure,Dessins,Placement),
     positionne(Figure,Placement,NewFigure),
     test_all_placement(NewFigure,Dessins,Placement,ReturnFigure).
 placeFigure(Figure,Dessins,ReturnFigure):-
+%write(Dessins), nl,
     test_placement_dessins_angle_match(Figure,Dessins,Placement),
     positionne(Figure,Placement,[Axe1,Axe2],NewFigure),
     test_placement(NewFigure,Dessins,[Axe1,Axe2],ReturnFigure).
-
-
 
 test_placement(NewFigure,Dessins,[Axe1,_],ReturnFigure):-
     test_all_placement(NewFigure,Dessins,[[],Axe1],ReturnFigure),!.

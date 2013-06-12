@@ -12,14 +12,20 @@
 
 
 
-soustraction([Patterns], Forme, [NewPatterns]):-
+soustraction([Patterns], Forme, [NewPatterns2]):-
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Forme,CoupleAreteForme),
     search_commmon_arete(CoupleAretePatterns,CoupleAreteForme,Arete),
     mix_pattern_forme(CoupleAretePatterns,CoupleAreteForme,Arete,Mixed),
     clean_double_arete(Mixed,CleanedMixed),
     arete_to_point(CleanedMixed,NewListPoint),
-    clean_double_point(NewListPoint,NewPatterns).
+    clean_double_point(NewListPoint,NewPatterns1),
+    clean_first_last_double_point(NewPatterns1,NewPatterns2).
+
+
+clean_first_last_double_point([A|Reste],Reste):-
+    dernier(Reste,A),!.
+clean_first_last_double_point(L,L).
 
 
 arete_to_point([[[Pt1,Pt2],A2]|Reste],[[Pt1,Pt2]|NewPatterns]):-
@@ -33,8 +39,8 @@ arete_to_point2([A1,A2|Reste],[[X,Y]|Result]):-
 
 
 clean_double_point([],[]):-!.
-clean_double_point([A,A|Rest],[A|Result]):-!,
-    clean_double_point(Rest,Result).
+clean_double_point([A,A|Rest],Result):-!,
+    clean_double_point([A|Rest],Result).
 clean_double_point([A|Rest],[A|Result]):-
     clean_double_point(Rest,Result).
 
