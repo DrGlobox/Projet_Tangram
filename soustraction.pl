@@ -12,15 +12,73 @@
 
 
 
-soustraction([Patterns], Forme, [NewPatterns2]):-
+soustraction([Patterns], Forme, [NewPatterns4]):-
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Forme,CoupleAreteForme),
     search_commmon_arete(CoupleAretePatterns,CoupleAreteForme,Arete),
     mix_pattern_forme(CoupleAretePatterns,CoupleAreteForme,Arete,Mixed),
     clean_double_arete(Mixed,CleanedMixed),
+    %clean_double_vecteur(CleanedMixed,CleanedMixedVecteur),
+    %arete_to_point(CleanedMixedVecteur,NewListPoint),
     arete_to_point(CleanedMixed,NewListPoint),
     clean_double_point(NewListPoint,NewPatterns1),
-    clean_first_last_double_point(NewPatterns1,NewPatterns2).
+    clean_first_last_double_point(NewPatterns1,NewPatterns3),
+    clean_double_vecteur(NewPatterns3,NewPatterns4).
+
+
+
+
+
+clean_double_vecteur(Patterns,NewPatterns):-
+    clean_double_vecteur2(Patterns,NewPatterns1),
+    clean_double_vecteur_premier(NewPatterns1,NewPatterns2),
+    clean_double_vecteur_dernier(NewPatterns2,NewPatterns).
+
+
+
+clean_double_vecteur_premier([P,PS|Reste],[PS|Reste]):-
+    tools:dernier(Reste,D),
+    test_point([D,P,PS],[D,PS]),!.
+clean_double_vecteur_premier(Liste,Liste).
+
+clean_double_vecteur_dernier([P|Reste],[P|R]):-
+    tools:dernier(Reste,D),tools:avantDernier(Reste,AD),
+    test_point([AD,D,P],[AD,P]),!,
+    remove_last_point(Reste,R).
+clean_double_vecteur_dernier(Liste,Liste).
+    
+
+clean_double_vecteur2([],[]):-!.
+clean_double_vecteur2([P1,P2,P3],Result):-!,
+    test_point([P1,P2,P3],Result).
+clean_double_vecteur2([P1,P2,P3|Reste],[P1|Result]):-!,
+    test_point([P1,P2,P3],[P1,P2,P3]),
+    clean_double_vecteur2([P2,P3|Reste],Result).
+clean_double_vecteur2([P1,P2,P3|Reste],Result):-!,
+    test_point([P1,P2,P3],[P1,P3]),
+    clean_double_vecteur2([P1,P3|Reste],Result).
+
+
+
+
+
+test_point([P1,P2,P3],[P1,P3]):-
+    calcul_vecteur(P1,P2,U12),
+    calcul_vecteur(P2,P3,U23),
+    test_colineaire(U12,U23),!.
+test_point([P1,P2,P3],[P1,P2,P3]).
+
+calcul_vecteur([[X1,Y1],[X2,Y2]],Vecteur):-
+    calcul_vecteur([X1,Y1],[X2,Y2],Vecteur).
+calcul_vecteur([X1,Y1],[X2,Y2],[Xu,Yu]):-
+    Xu is X2 - X1, Yu  is Y2 - Y1.
+
+test_colineaire([Ux,Uy],[Vx,Vy]):-
+    UxVy is Ux * Vy,
+    UyVx is Uy * Vx,
+    UxVy == UyVx,!.
+
+test_colineaire(_,_):-fail.
 
 
 clean_first_last_double_point([A|Reste],Reste):-

@@ -1,8 +1,7 @@
-:- module(tools, [pow/3,distance/3,dernier/2,premier/2,aretes/2,aretes_dessin/2,
-                  membre/2,translate_figure/3,rotate_figure/4,find_angle/3,
-                  symetrie_figure/3,liste_all_couple_aretes/2
-                 ]
-         ).
+:- module(tools, [pow/3,distance/3,dernier/2,avantDernier/2,premier/2,
+                remove_last_point/2,aretes/2,aretes_dessin/2,
+                membre/2,translate_figure/3,rotate_figure/4,find_angle/3,
+                symetrie_figure/3,liste_all_couple_aretes/2 ]).
 
 :- (   stream_property(user_output, tty(true))
    ->  load_files(library(ansi_term), [silent(true)])
@@ -20,13 +19,25 @@ distance([Xp,Yp],[Xo,Yo],D):-
 	D is sqrt( (Xo - Xp)**2 + (Yo - Yp)**2 ), !.
 
 %dernier(+List,-Dernier)
-% la fonction retour le dernier element de le liste
+% la fonction retourne le dernier element de le liste
 dernier([Dernier],Dernier):-!.
 dernier([_|Reste],Dernier):-dernier(Reste,Dernier).
 
+
+%avantDernier(+List,-AvantDernier)
+% la fonction retourne l'avantDernier element de le liste
+avantDernier([X,_],X):-!.
+avantDernier([_|Reste],AvantDernier):-avantDernier(Reste,AvantDernier).
+
 %premier(+List,-Premier)
-% la fonction retour le premier element de le liste
+% la fonction retourne le premier element de le liste
 premier([Premier|_],Premier).
+
+%remove_last_point(+Liste,-NewListe):-
+% la fonction retourne la liste dans le dernier point
+remove_last_point([_],[]).
+remove_last_point([P|Reste],[P|Result]):-remove_last_point(Reste,Result).
+
 
 %aretes_figure(+Figure,-Arete)
 %   La fonction retoure la liste des aretes d'une figure
