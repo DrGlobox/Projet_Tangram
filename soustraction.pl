@@ -15,15 +15,36 @@ soustraction([Patterns], Forme, [NewPatterns4]):-
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Forme,CoupleAreteForme),
     search_commmon_arete(CoupleAretePatterns,CoupleAreteForme,Arete),
-    mix_pattern_forme(CoupleAretePatterns,CoupleAreteForme,Arete,Mixed),
+    search_sens_forme(CoupleAreteForme,Arete,Sens),
+    retourne_forme(CoupleAreteForme,Sens,CoupleAreteForme1),
+    mix_pattern_forme(CoupleAretePatterns,CoupleAreteForme1,Arete,Mixed),
     clean_double_arete(Mixed,CleanedMixed),
-    %clean_double_vecteur(CleanedMixed,CleanedMixedVecteur),
-    %arete_to_point(CleanedMixedVecteur,NewListPoint),
     arete_to_point(CleanedMixed,NewListPoint),
     clean_double_point(NewListPoint,NewPatterns1),
-    clean_first_last_double_point(NewPatterns1,NewPatterns3),
-    clean_double_vecteur(NewPatterns3,NewPatterns4).
+    clean_first_last_double_point(NewPatterns1,NewPatterns4).
 
+
+
+retourne_forme(Forme,1,Forme):-!.
+retourne_forme([],-1,[]):-!.
+retourne_forme([[P1,P2]|Reste],-1,Result):-
+    retourne_forme(Reste,-1,R),
+    ajout_fin(R,[P2,P1],Result).
+
+
+ajout_fin([],A,[A]):-!.
+ajout_fin([T|Reste],A,[T|Result]):-
+    ajout_fin(Reste,A,Result).
+
+search_sens_forme([A|_],Arete,Sens):-
+    teste_aretes_egales(A,Arete),
+    get_sens(A,Arete,Sens),!.
+search_sens_forme([_|Reste],Arete,Sens):-
+    search_sens_forme(Reste,Arete,Sens).
+
+get_sens([P2,P1],[P2,P1],1):-!.
+get_sens([P1,P2],[P2,P1],-1):-!.
+get_sens(_,_,0):-fail.
 
 
 
@@ -85,7 +106,9 @@ clean_first_last_double_point([A|Reste],Reste):-
 clean_first_last_double_point(L,L).
 
 
+arete_to_point([],[]):-!.
 arete_to_point([[[Pt1,Pt2],A2]|Reste],[[Pt1,Pt2]|NewPatterns]):-
+    writeln('------------->'),
     arete_to_point2([[[Pt1,Pt2],A2]|Reste],NewPatterns).
 
 arete_to_point2([[Pt1,Pt2],[Pt3,Pt4]],[[X,Y]]):-!,

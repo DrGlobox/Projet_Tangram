@@ -22,6 +22,7 @@ main(Pattern, PiecesRetenues) :-
 % Essai de chaque pièce dans la liste
 % Pour ne pas faire d'itération inutile, on limite le compteur à 5
 % Si la pièce n'est plaçable nul part, on la place à la fin
+essai_piece(_,[[]],_,_):-!.
 essai_piece([], _, _, _) :- !.
 essai_piece(_, _, _, 0) :- 
 	write_ln('\tBout de la branche atteint'), !, fail.

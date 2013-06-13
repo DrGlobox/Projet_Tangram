@@ -41,6 +41,7 @@ pattern(maison).
 pattern(grange).
 pattern(brique).
 pattern(pat_triangle).
+pattern(piece_triangle).
 
 points_pattern(triangle, [[[0,0], [200,0], [100,100]]]).
 points_pattern(cube, [[[50,0], [100,50], [100,100], [50,150], [0,100], [0,50]]]).
@@ -56,3 +57,4 @@ points_pattern(maison, [[[0,0], [100,0], [125,25], [25,125], [0,100]]]).
 points_pattern(grange, [[[25,0], [75,0], [125,50], [50,125], [0,75], [0,25]]]).
 points_pattern(brique, [[[50,0], [150,0], [175,25], [125,75], [25,75], [0,50]]]).
 points_pattern(pat_triangle, [[[0,0],[0,100],[100,0]]]).
+points_pattern(piece_triangle, [[[0,0],[0,100],[50,50]]]).
