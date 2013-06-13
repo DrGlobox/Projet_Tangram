@@ -24,6 +24,8 @@ main(Pattern, PiecesRetenues) :-
 % Si la pièce n'est plaçable nul part, on la place à la fin
 essai_piece(_,[[]],_,_):-!.
 essai_piece([], _, _, _) :- !.
+essai_piece(_, [], Solution, _) :- !, 
+	affiche_resultat(Solution).
 essai_piece(_, _, _, 0) :- 
 	write_ln('\tBout de la branche atteint'), !, fail.
 essai_piece([Piece|PiecesRestantes], Pattern, [[Piece, Placements]|PiecesRetenues], _) :-
