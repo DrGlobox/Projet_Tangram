@@ -1,7 +1,7 @@
 :- module(tools, [pow/3,distance/3,dernier/2,avantDernier/2,premier/2,
-                remove_last_point/2,aretes/2,aretes_dessin/2,
-                membre/2,translate_figure/3,rotate_figure/4,find_angle/3,
-                symetrie_figure/3,liste_all_couple_aretes/2 ]).
+                remove_last_point/2,aretes/2,aretes_pattern/2,
+                membre/2,translate_piece/3,rotate_piece/4,find_angle/3,
+                symetrie_piece/3,liste_all_couple_aretes/2 ]).
 
 :- (   stream_property(user_output, tty(true))
    ->  load_files(library(ansi_term), [silent(true)])
@@ -39,25 +39,25 @@ remove_last_point([_],[]).
 remove_last_point([P|Reste],[P|Result]):-remove_last_point(Reste,Result).
 
 
-%aretes_figure(+Figure,-Arete)
-%   La fonction retoure la liste des aretes d'une figure
+%aretes_piece(+Piece,-Arete)
+%   La fonction retoure la liste des aretes d'une piece
 aretes([_],[]):-!.
 aretes([T1,T2|Reste],[[T1,T2]|Aretes]):-aretes([T2|Reste],Aretes).
-aretes_figure([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Reste],D).
+aretes_piece([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Reste],D).
 
-%aretes_dessin(+Dessin,-Arretes)
-%   La fonction retourne la liste de toutes les figures qui composent le dessin
-aretes_dessin([],[]).
-aretes_dessin([Dessin|Reste],[Aretes|Resutat]):-aretes_dessin(Reste,Resutat), aretes_figure(Dessin,Aretes).
+%aretes_pattern(+Pattern,-Arretes)
+%   La fonction retourne la liste de toutes les pieces qui composent le pattern
+aretes_pattern([],[]).
+aretes_pattern([Pattern|Reste],[Aretes|Resutat]):-aretes_pattern(Reste,Resutat), aretes_piece(Pattern,Aretes).
 
 membre(X,[X|_]):-!.
 membre(X,[_|R]):-membre(X,R).
 
-%rotate_figure(Points, Origine, Angle, Points_tournes)
+%rotate_piece(Points, Origine, Angle, Points_tournes)
 %   avec Points liste de point et Angle entier en radian et Points_tournes
-rotate_figure([], _, _,[]):-!.
-rotate_figure([Point|Reste], Origine, Angle,[Point_tourne|Retour]):-
-    rotate_figure(Reste,Origine,Angle,Retour),
+rotate_piece([], _, _,[]):-!.
+rotate_piece([Point|Reste], Origine, Angle,[Point_tourne|Retour]):-
+    rotate_piece(Reste,Origine,Angle,Retour),
     rotate_point(Point,Origine,Angle,Point_tourne).
 
 %rotate_point(Point, Origine,Angle,Point_tourne)
@@ -90,11 +90,11 @@ find_angle([[Ptx1,Pty1],[Ptx2,Pty2]],[[Ptx3,Pty3],[Ptx4,Pty4]],Angle):-
 
 
 
-%translate_figure(+Figure,+Vecteur,-NouvelleFigure)
-%   retourne les nouvelles coordonnées de la figure tranlaté par le vecteur
-translate_figure([],_,[]).
-translate_figure([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
-    translate_figure(Reste,[Ax,Ay],Resultat),
+%translate_piece(+Piece,+Vecteur,-NouvellePiece)
+%   retourne les nouvelles coordonnées de la piece tranlaté par le vecteur
+translate_piece([],_,[]).
+translate_piece([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
+    translate_piece(Reste,[Ax,Ay],Resultat),
     Ptx is Pox + Ax, Pty is Poy + Ay.
 
 polaire([X,Y],[Ox,Y],Teta,D):-
@@ -130,24 +130,24 @@ symetrie([Cx, Cy], [[Ax, Ay], [Bx, By]], [Nx, Ny]) :-
     goodTeta(TetaB,TetaC,TetaNC),
     unpolaire([Nx,Ny],[Ax,Ay],TetaNC,AC).
 
-%symetrie_figure(Figure,Axe,NouvelleFigure)
-%   La méthode permet de retourné une figure par rapport à un axe
-symetrie_figure([],_,[]).
-symetrie_figure([[Px,Py]|Reste],[[Px,Py],[PBx,PBy]],[[Px,Py]|Resultat]):-
-    symetrie_figure(Reste,[[Px,Py],[PBx,PBy]],Resultat),!.
-symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[Px,Py]],[[Px,Py]|Resultat]):-
-    symetrie_figure(Reste,[[PAx,PAy],[Px,Py]],Resultat),!.
-symetrie_figure([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
-    symetrie_figure(Reste,[[PAx,PAy],[PBx,PBy]],Resultat),
+%symetrie_piece(Piece,Axe,NouvellePiece)
+%   La méthode permet de retourné une piece par rapport à un axe
+symetrie_piece([],_,[]).
+symetrie_piece([[Px,Py]|Reste],[[Px,Py],[PBx,PBy]],[[Px,Py]|Resultat]):-
+    symetrie_piece(Reste,[[Px,Py],[PBx,PBy]],Resultat),!.
+symetrie_piece([[Px,Py]|Reste],[[PAx,PAy],[Px,Py]],[[Px,Py]|Resultat]):-
+    symetrie_piece(Reste,[[PAx,PAy],[Px,Py]],Resultat),!.
+symetrie_piece([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
+    symetrie_piece(Reste,[[PAx,PAy],[PBx,PBy]],Resultat),
     symetrie([Px,Py],[[PAx,PAy],[PBx,PBy]],[Pnx,Pny]).
 
 
-liste_all_couple_aretes(AretesDessin,CouplesAretes):-
-    getListeCoupleAretes(AretesDessin,CouplesAretes).
+liste_all_couple_aretes(AretesPattern,CouplesAretes):-
+    getListeCoupleAretes(AretesPattern,CouplesAretes).
 
-getListeCoupleAretes(AretesDessin,[[Dernier,Premier]|ListeReturn]):-
-    getCoupleAretes(AretesDessin,ListeReturn),
-    premier(AretesDessin,Premier),dernier(AretesDessin,Dernier).
+getListeCoupleAretes(AretesPattern,[[Dernier,Premier]|ListeReturn]):-
+    getCoupleAretes(AretesPattern,ListeReturn),
+    premier(AretesPattern,Premier),dernier(AretesPattern,Dernier).
 
 getCoupleAretes([Arete1,Arete2],[[Arete1,Arete2]]):-!.
 getCoupleAretes([Arete1,Arete2|Rest],[[Arete1,Arete2]|ListeReturn]):-
