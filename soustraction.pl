@@ -1,7 +1,6 @@
 :-module(soustraction, [soustraction/3]).
 :-use_module(tools).
 :-use_module(tangram).
-:-use_module(placeFigure).
 
 %soustraction(Patterns, Forme, New_patterns) 
 %avec   Patterns la liste des sous patterns contenant chacun 
