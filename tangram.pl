@@ -55,3 +55,6 @@ points_dessin(maison, [[[0,0], [100,0], [125,25], [25,125], [0,100]]]).
 points_dessin(grange, [[[25,0], [75,0], [125,50], [50,125], [0,75], [0,25]]]).
 points_dessin(brique, [[[50,0], [150,0], [175,25], [125,75], [25,75], [0,50]]]).
 points_dessin(pat_triangle, [[[0,0],[0,100],[100,0]]]).
+
+dessin(moitie_carre).
+points_dessin(moitie_carre, [[[0,0], [100,0], [100,50],[75,25],[50,50]]]).

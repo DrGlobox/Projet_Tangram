@@ -10,12 +10,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 placeFigure(Figure,Dessins,ReturnFigure):-
-%write(Dessins), nl,
+write(Dessins), nl,
     test_placement_dessins_exact_match(Figure,Dessins,Placement),
     positionne(Figure,Placement,NewFigure),
     test_all_placement(NewFigure,Dessins,Placement,ReturnFigure).
 placeFigure(Figure,Dessins,ReturnFigure):-
-%write(Dessins), nl,
+write(Dessins), nl,
     test_placement_dessins_angle_match(Figure,Dessins,Placement),
     positionne(Figure,Placement,[Axe1,Axe2],NewFigure),
     test_placement(NewFigure,Dessins,[Axe1,Axe2],ReturnFigure).
