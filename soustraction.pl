@@ -12,7 +12,6 @@
 
 
 soustraction([Patterns], Forme, [NewPatterns4]):-
-	write_ln(Patterns), write_ln(Forme),
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Forme,CoupleAreteForme),
     search_commmon_arete(CoupleAretePatterns,CoupleAreteForme,Arete),

@@ -10,12 +10,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 placePiece(Piece,Patterns,ReturnPiece):-
-%write(Patterns), nl,
     test_placement_patterns_exact_match(Piece,Patterns,Placement),
     positionne(Piece,Placement,NewPiece),
     test_all_placement(NewPiece,Patterns,Placement,ReturnPiece).
 placePiece(Piece,Patterns,ReturnPiece):-
-%write(Patterns), nl,
     test_placement_patterns_angle_match(Piece,Patterns,Placement),
     positionne(Piece,Placement,[Axe1,Axe2],NewPiece),
     test_placement(NewPiece,Patterns,[Axe1,Axe2],ReturnPiece).
