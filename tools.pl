@@ -1,7 +1,10 @@
 :- module(tools, [pow/3,distance/3,dernier/2,avantDernier/2,premier/2,
                 remove_last_point/2,aretes/2,aretes_pattern/2,
                 membre/2,translate_piece/3,rotate_piece/4,find_angle/3,
-                symetrie_piece/3,liste_all_couple_aretes/2 ]).
+                symetrie_piece/3,liste_all_couple_aretes/2,retourne_forme/3,
+                ajout_fin/3,search_sens_forme/3,search_commmon_arete/3,
+                remove_arete_patterns/3
+                ]).
 
 :- (   stream_property(user_output, tty(true))
    ->  load_files(library(ansi_term), [silent(true)])
@@ -174,5 +177,52 @@ find_common_point([[X,Y],[_,_]],[[_,_],[X,Y]],[X,Y]):-!.
 find_common_point([[_,_],[X,Y]],[[X,Y],[_,_]],[X,Y]):-!.
 find_common_point([[_,_],[X,Y]],[[_,_],[X,Y]],[X,Y]):-!.
 find_common_point(_,_,[0,0]).
+
+
+retourne_forme(Piece,1,Piece):-!.
+retourne_forme([],-1,[]):-!.
+retourne_forme([[P1,P2]|Reste],-1,Result):-
+    retourne_forme(Reste,-1,R),
+    ajout_fin(R,[P2,P1],Result).
+
+
+ajout_fin([],A,[A]):-!.
+ajout_fin([T|Reste],A,[T|Result]):-
+    ajout_fin(Reste,A,Result).
+
+search_sens_forme([A|_],Arete,Sens):-
+    teste_aretes_egales(A,Arete),
+    get_sens(A,Arete,Sens),!.
+search_sens_forme([_|Reste],Arete,Sens):-
+    search_sens_forme(Reste,Arete,Sens).
+
+get_sens([P2,P1],[P2,P1],1):-!.
+get_sens([P1,P2],[P2,P1],-1):-!.
+get_sens(_,_,0):-fail.
+
+
+teste_aretes_egales([P2,P1],[P2,P1]):-!.
+teste_aretes_egales([P1,P2],[P2,P1]):-!.
+teste_aretes_egales(_,_):-fail.
+
+
+search_commmon_arete([Arete|_],Piece,Arete):-
+    search_arete_in_forme(Arete,Piece),!.
+
+search_commmon_arete([_|Reste],Piece,Arete):-
+    search_commmon_arete(Reste,Piece,Arete).
+
+    
+search_arete_in_forme(_,[]):-!,fail.
+search_arete_in_forme(Arete,[APiece|_]):-
+    teste_aretes_egales(Arete,APiece),!.
+search_arete_in_forme(Arete,[_|RPiece]):-
+    search_arete_in_forme(Arete,RPiece),!.
+
+
+remove_arete_patterns(_,[],[]):-!.
+remove_arete_patterns(A,[A|Reste],Reste):-!.
+remove_arete_patterns(A,[B|Reste],[B|Result]):-
+    remove_arete_patterns(A,Reste,Result).
 
 
