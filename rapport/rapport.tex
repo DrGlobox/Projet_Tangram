@@ -150,18 +150,18 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
     Pour résoudre ce problème, un algorithme existant et assez complexe a été utilisé. Pour chaque sommet de la figure, le nombre d'arêtes ayant un point à la même hauteur que le sommet est compté. Dans le cas où un nombre impair de points de chaque coté de l'arête est trouvé, alors le point est à l'intérieur du modèle. Sinon, il se trouve à l'extérieur.\\
     La source de l'algorithme est disponible à l'adresse suivante : \emph{http://alienryderflex.com/polygon/}\\ 
 
-    Après avoir testé l'ensemble des points de la pièce positionnée et ainsi que l'ensemble des points de son symétrique par rapport à l'arête de la base, l'une des pièces est identifiée comme étant en partie à l'extérieur du modèle.\\ \ \\
+    Après avoir testé l'ensemble des points de la pièce positionnée et ainsi que l'ensemble des points de son symétrique par rapport à l'arête de la base, l'une des pièces est identifiée comme étant en partie à l'extérieur du modèle.\\ 
 
-    L'algorithme chargé de générer l'ensemble des placements possibles va donc pour une pièce et un modèle donnés, tenter de trouver les positions disponibles. Pour cela, la première méthode va être utilisée puis de la seconde. Dans le deux cas, la validité des résultats trouvés est vérifiée.\\
+    L'algorithme chargé de générer l'ensemble des placements possibles va donc pour une pièce et un modèle donnés, tenter de trouver les positions disponibles. Pour cela, la première méthode va être utilisée puis de la seconde. Dans les deux cas, la validité des résultats trouvés est vérifiée.\\
     Dans le cas où aucun placement n'est possible (c'est à dire si le modèle est trop petit pour accueillir la pièce ou si aucun angle ni aucune arête ne convient), l'algorithme échoue.
 	
 		\section{Soustraction d'une forme au modèle}
 		
 		Le second problème mathématique que la résolution exigeait de résoudre est la soustraction d'une forme au modèle. En effet, la solution la plus simple résidait dans le fait de placer une forme dans le modèle pour ensuite renvoyer un nouveau problème et recommencer le casse-t\^ete la forme placée en moins avec le nouveau modèle.\\
-		Ce problème imposait donc plusieurs sous-étapes pour pouvoir retourner de façon efficace le nouveau modèle. Ces sous-étapes sont la découverte des tous les points du nouveau modèle, puis la suppression d'éventuels points qui seraient inutiles. Une précision importante à apporter est le fait qu'il faut conserver l'ordre des points du modèle afin de conserver la forme voulue. Le travail nécessite donc de passer non pas seulement par des points mais par des arêtes.\\
+		Ce problème imposait donc plusieurs sous-étapes pour pouvoir retourner de façon efficace le nouveau modèle. Ces sous-étapes sont la découverte de tous les points du nouveau modèle, puis la suppression d'éventuels points qui seraient inutiles. Une précision importante à apporter est le fait qu'il faut conserver l'ordre des points du modèle afin de conserver la forme voulue. Le travail nécessite donc de passer non pas seulement par des points mais par des arêtes.\\
 		Le fait d'utiliser des arêtes a permis de réunir les deux sous-étapes puisque la suppression de points superflus se fait tout au long de la découverte des nouveaux points. Malgré tout, plusieurs étapes sont nécessaire pour la découverte du nouveau modèle.\\ \ \\
 		La première étape, tout comme lors de l'étape du placement d'une pièce, est de trouver une arête commune à la pièce et au modèle. La différence étant qu'ici, l'algorithme est sûr de trouver au moins une arête commune. Dans le cas où plusieurs arêtes correspondent, l'algorithme prend simplement la première qui arrive puisque le choix de l'arête n'a pas d'importance.\\
-		Un fois cette arête commune choisie, on doit vérifier si le sens de la forme est la même que le sens du modèle. En effet, lors de la recherche d'une arête commune, on cherche sans distinction si l'arête est présentée dans le même sens ou non. Par exemple, si sur la forme l'arête a pour coordonnées $(0,100)$ et sur le modèle les coordonnées $(100,0)$, il faut "retourner" les arêtes afin que les coordonnées correspondent.\\
+		Une fois cette arête commune choisie, on doit vérifier si le sens de la forme est la même que le sens du modèle. En effet, lors de la recherche d'une arête commune, on cherche sans distinction si l'arête est présentée dans le même sens ou non. Par exemple, si sur la forme l'arête a pour coordonnées $(0,100)$ et sur le modèle les coordonnées $(100,0)$, il faut "retourner" les arêtes afin que les coordonnées correspondent.\\
 		Une fois la pièce à insérer mise en bonne forme, ses arêtes sont ajoutées sans test dans le modèle juste après l'arête commune entre la pièce et la forme. Ainsi, les arêtes de la pièces cont ajoutées au bon endroit dans le modèle.\\
 		
 		\begin{center}
@@ -211,7 +211,7 @@ n'ayant plus de fils. Dans ce cas, l'algorithme effectue du "backtracking" et pe
 	
 	\chapter{Représentation informatique du problème}
 	
-	Le passage de la phase d'analyse à la phase "informatique" du pour la résolution du tangram s'avère beaucoup plus complexe que ce qui avait été prévu. Cependant, des représentations précises ont été adoptées. Ces représentations se traduisent par des structures de données fixes qui ont été mises en place afin de mieux coordonner les différents prédicats Prolog.
+	Le passage de la phase d'analyse à la phase "informatique" du problème pour la résolution du tangram s'avère beaucoup plus complexe que ce qui avait été prévu. Cependant, des représentations précises ont été adoptées. Ces représentations se traduisent par des structures de données fixes qui ont été mises en place afin de mieux coordonner les différents prédicats Prolog.
 
 	    \section{Structures de données}
 
@@ -257,10 +257,10 @@ pouvant aussi pas être plus petite ou plus grande que les différentes coordonn
 		État initial pour le modèle du carré:\\
 \begin{verbatim}
 (
-	(petit_triangle, gros_triangle, moyen_triangle, carre,	
-		parallelogramme, petit_triangle, gros_triangle),
-	((0, 0), (100, 0), (100, 100), (0, 100)),						
-	()														
+    (petit_triangle, gros_triangle, moyen_triangle, carre,	
+        parallelogramme, petit_triangle, gros_triangle), % Pieces
+    ((0, 0), (100, 0), (100, 100), (0, 100)),	            % Modele					
+    ()                                                   % PiecesPlacees
 )
 \end{verbatim}
 
@@ -268,17 +268,17 @@ pouvant aussi pas être plus petite ou plus grande que les différentes coordonn
 État intermédiaire:\\
 \begin{verbatim}
 (
-	(petit_triangle, moyen_triangle, carre,					
-		parallelogramme, petit_triangle), 
-	((100, 0), (100, 100), (0, 100)),							   
-	(														
-		(gros_triangle, 
-			((0, 0), (0, 100), (50, 50))
-		),
-		(gros_triangle, 
-			((0, 0), (100, 0), (50, 50))
-		)
-	)
+    (petit_triangle, moyen_triangle, carre,					
+        parallelogramme, petit_triangle),   % Pieces
+    ((100, 0), (100, 100), (0, 100)),       % Modele							   
+    (														
+        (gros_triangle, 
+            ((0, 0), (0, 100), (50, 50))
+        ),
+        (gros_triangle, 
+            ((0, 0), (100, 0), (50, 50))
+        )
+    )                                       % PiecesPlacees
 )
 \end{verbatim}
 
@@ -286,20 +286,20 @@ pouvant aussi pas être plus petite ou plus grande que les différentes coordonn
 État final:\\
 \begin{verbatim}
 (
-	(),														
-	(),														
-	(													   
-		(gros_triangle,
-			((0, 0), (0, 100), (50, 50))
-		),
-		(gros_triangle, 
-			((0, 0), (100, 0), (50, 50))
-		),
-		...,
-		(moyen_triangle,
-			((100, 50), (100, 100), (50, 100))
-		)
-	)
+    (),                                              % Pieces												
+    (),	                                              % Modele										
+    (													   
+        (gros_triangle,
+            ((0, 0), (0, 100), (50, 50))
+        ),
+        (gros_triangle, 
+            ((0, 0), (100, 0), (50, 50))
+        ),
+        ...,
+        (moyen_triangle,
+            ((100, 50), (100, 100), (50, 100))
+        )
+    )                                                % PiecesPlacees
 )
 \end{verbatim}
 
@@ -329,7 +329,7 @@ est égal à 7;
 	
 	Les deux Tangrams suivants sont résolus sans problèmes par le logiciel et sont issus du modèle carré classique connu de tous:
 	\begin{itemize}
-		\item Cas du demi carré avec deux triangles à place:
+		\item Cas du demi carré avec deux triangles à placer:
 		\begin{center}
 			\includegraphics[width=12cm]{resultat_1}\\
 		\end{center}
@@ -367,8 +367,8 @@ est égal à 7;
 
     \chapter{Prédicat soustraction}
     \begin{verbatim}
-    % file : soustraction.pl
-    soustraction([Patterns], Piece, [NewPatterns]):-
+% file : soustraction.pl
+soustraction([Patterns], Piece, [NewPatterns]):-
 
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Piece,CoupleAretePiece),
