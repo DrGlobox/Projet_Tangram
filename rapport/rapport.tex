@@ -1,5 +1,7 @@
 \documentclass[a4paper, 11pt]{report}
 
+\usepackage{fullpage}
+
 
 
 \input{modele}
@@ -156,9 +158,56 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
 	
 		\section{Soustraction d'une forme au modèle}
 		
-		Le second problème mathématique que la résolution exigeait de résoudre est la soustraction d'une forme au modèle. En effet, la solution la plus simple résidait dans le fait de placer une forme dans le modèle pour ensuite renvoyer un nouveau problème et recommencer le casse-t\^ete la forme placée en moins avec le nouveau modèle.
-	
-	
+		Le second problème mathématique que la résolution exigeait de résoudre est la soustraction d'une forme au modèle. En effet, la solution la plus simple résidait dans le fait de placer une forme dans le modèle pour ensuite renvoyer un nouveau problème et recommencer le casse-t\^ete la forme placée en moins avec le nouveau modèle.\\
+		Ce problème imposait donc plusieurs sous-étapes pour pouvoir retourner de façon efficace le nouveau modèle. Ces sous-étapes sont la découverte des tous les points du nouveau modèle, puis la suppression d'éventuels points qui seraient inutiles. Une précision importante à apporter est le fait qu'il faut conserver l'ordre des points du modèle afin de conserver la forme voulue. Le travail nécessite donc de passer non pas seulement par des points mais par des arêtes.\\
+		Le fait d'utiliser des arêtes a permis de réunir les deux sous-étapes puisque la suppression de points superflus se fait tout au long de la découverte des nouveaux points. Malgré tout, plusieurs étapes sont nécessaire pour la découverte du nouveau modèle.\\ \ \\
+		La première étape, tout comme lors de l'étape du placement d'une pièce, est de trouver une arête commune à la pièce et au modèle. La différence ici est que la pièce a un placement déjà fixé, on sait donc d'avance l'arête qui sera trouvée comme correspondant au modèle et à la forme. Dans le cas où plusieurs arêtes correspondent, l'algorithme prend simplement la première qui arrive puisque le choix de l'arête n'a pas d'importance.\\
+		Un fois cette arête commune choisie, on doit vérifier si le sens de la forme est la même que le sens du modèle. En effet, lors de la recherche d'une arête commune, on cherche sans distinction si l'arête est présentée dans le même sens ou non. Par exemple, si sur la forme l'arête a pour coordonnées $(0,100)$ et sur le modèle les coordonnées $(100,0)$, il faut "retourner" les arêtes afin que les coordonnées correspondent.\\
+		Une fois la pièce à insérer mise en bonne forme, ses arêtes sont ajoutées sans test dans le modèle juste après l'arête commune entre la pièce et la forme. Ainsi, les arêtes de la pièces cont ajoutées au bon endroit dans le modèle.\\
+		
+		\begin{center}
+			\includegraphics[width=12cm]{soustraction_arete_1}\\
+			\emph{Ici, on peut voir que l'arête du haut du carré est commune au triangle placé. On va donc placer les arêtes du triangle juste après l'arête du modèle qui est commune à celle du triangle. Comme le triangle possède aussi cette arête, le placement est correct.\\}
+		\end{center}
+		
+		Cependant, une fois cette étape effectuée, on est en présence de doublons d'arêtes dans notre nouveau modèle. Cette nouvelle étape va donc vérifier les arêtes en double (quel que soit le sens). Ces dernières sont éliminées du modèle. Aucune occurrence de ces arêtes ne doit rester dans le nouveau modèle. En effet, en faisant apparaître des arêtes en double, l'algorithme indique que ce sont des arêtes qui étaient communes et qui n'ont donc plus lieu d'être du fait de la soustraction de la pièce.\\
+		
+		\begin{center}
+			\includegraphics[width=12cm]{soustraction_arete_2}\\
+			\emph{Dans ce cas, on voit que deux arêtes sont communes. La partie de l'algorithme recherchant les doublons d'arêtes va donc supprimer les occurrences de ces arêtes, ici surlignées en rouge. Le point en haut à gauche de l'ancien carré est donc supprimé automatiquement et le nouveau modèle adopte la bonne forme.}
+		\end{center}
+		
+		
+		Comme le travail est fait sous forme de points, l'algorithme fait repasser ensuite chaque arête en point et vérifie alors par prévention si aucun point n'apparaît en double à la suite. Si c'est le cas, on supprime une occurrence de ce point. \\
+		Enfin, comme l'algorithme a utilisé les arêtes, la première et la dernière arête ont un point en commun. Ce point va donc être présent au début et à la fin de la liste des points du nouveau modèle. Il faut donc supprimer celui qui se situe à la fin.\\ \ \\
+		
+		L'algorithme gère naturellement le cas d'arrêt de ce problème puisque lorsque le modèle passé correspond à la pièce, il va retourner un ensemble de points vides.
+		
+		\section{Implémentation de l'algorithme DFS (profondeur d'abord)}
+		
+ 			\subsection{Analyse de la recherche}
+
+		Le Tangram est un jeu qui n'est pas représentable par un système de coût suivant le placement de chaque pièce. En effet, toutes les pièces devant être placées, il n'y a pas de concurrence directe entre ces pièces. Même s'il était possible de mettre en place ce système de coût, il ne serait pas pertinent de le
+faire car les scores de chaque pièce seraient égaux.\\
+		Ici, le problème peut se modéliser par un arbre de recherche qui est cependant assez complexe. De très nombreuses configurations sont possibles pour chaque nœud. L'exemple du carré ci-dessous permet d'indiquer comment se construit l'arbre de recherche. Les étapes sont pour la résolution:
+		\begin{itemize}
+			\item Sélection de la première pièce: un gros triangle;
+			\item Celui-ci est positionnable sur le dessin mais à plusieurs endroits;
+			\item Ainsi, en plus d'avoir comme première branche le gros triangle, les branches filles représentent chaque configuration possible du gros triangle;
+			\item Pour chacune de ses branches, on essaye avec les pièces restantes, qui elles-même possèdent en sous-branche à nouveau leurs différentes configurations.\\
+		\end{itemize}
+		
+		Ainsi, chaque profondeur est alternée par le choix d'une pièce puis d'une de ses différentes configurations. Si une pièce ne possède aucun placement disponible, elle apparaît tout de même dans l'arbre mais n'a aucun enfant. S'il est considéré qu'un niveau est constitué de deux profondeurs, c'est à dire d'une pièce ainsi que de ses configurations, une solution est trouvée lorsque la recherche atteint le niveau 7, correspondant au nombre de pièces composant le
+jeu du Tangram.
+
+			\subsection{Choix de la recherche}
+
+		Dans la recherche à effectuer, il est donc nécessaire de parcourir chaque branche jusqu'à sa fin. Dans de nombreux cas, plusieurs solutions sont possibles, m\^eme si elles sont souvent proches (elles diffèrent pas rotation par exemple). Cependant, une seule solution étant nécessaire, il est plus pertinent de se diriger le plus rapidement vers la fin de chaque branche. Il faut donc exclure l'idée d'utiliser un algorithme parcourant en largeur l'arbre à construire et plutôt se focaliser sur une recherche en profondeur.\\
+		L'algorithme DFS (Depth First Search) est donc retenu. Il convient parfaitement à la situation puisqu'il étend le nœud du graphe et ses successeurs le plus longtemps possible jusqu'à atteindre le nœud but, ou jusqu'à atteindre un nœud
+n'ayant plus de fils. Dans ce cas, l'algorithme effectue du "backtracking" et permet d'explorer les branches suivantes. \\
+		Si la recherche atteint un nœud but (c'est à dire que toutes les pièces ont pu être placées avec succès), on arrête la recherche puisqu'on a résolu le problème. Chercher une autre solution ne ferait que surcharger le programme.
+
+
 	\newpage
 	
 	\chapter{Représentation informatique du problème}
@@ -180,7 +229,98 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
             \includegraphics[width=5cm]{representation_sousfigure}\\
             \emph{Dans le cas ci-dessus, on remarque que le placement du carré dans le modèle fait passer celui-ci d'une partie à deux en sortie de l'algorithme de soustraction d'une pièce à un modèle.}
         \end{center}
+        
+        
+        \subsection{Espace d'états}
 
+		Les états sont composés de plusieurs éléments :
+		\begin{itemize}
+			\item les pièces restantes à placer;
+			\item les coordonnées représentant le modèle restant à combler;
+			\item les pièces déjà placées, ainsi que leurs coordonnées.
+		\end{itemize}
+
+		Il est donc possible de coder ces états comme suit:\\
+		$(Pieces, Modele, PiecesPlacees)$\\
+
+		$Pieces$ est défini dans l'ensemble des pièces disponibles pour résoudre le Tangram (soit 7 pièces, donc 7 valeurs différentes).\\
+		$PiecesPlacees$ est défini de manière semblable, sauf que les coordonnées sont définies dans le plan défini par le modèle.\\
+		$Modele$ est défini également dans le plan, ses valeurs ne
+pouvant aussi pas être plus petite ou plus grande que les différentes coordonnées composant le modèle de base. Il est important de noter que toutes les coordonnées sont positives (définies dans la partie Nord-Est du repère).\\ \ \\
+
+		\paragraph{Exemple pour les coordonnées pour le modèle du carré\\}
+ 
+		Les coordonnées sont définies telles que $0\ \leq\ X\ \leq\ 100$ et $0\ \leq\ Y\ \leq\ 100$.\\ \ \\
+
+		\paragraph{Exemple de différents états\\}
+
+		État initial pour le modèle du carré:\\
+\begin{verbatim}
+(
+	(petit_triangle, gros_triangle, moyen_triangle, carre,	
+		parallelogramme, petit_triangle, gros_triangle),
+	((0, 0), (100, 0), (100, 100), (0, 100)),						
+	()														
+)
+\end{verbatim}
+
+
+État intermédiaire:\\
+\begin{verbatim}
+(
+	(petit_triangle, moyen_triangle, carre,					
+		parallelogramme, petit_triangle), 
+	((100, 0), (100, 100), (0, 100)),							   
+	(														
+		(gros_triangle, 
+			((0, 0), (0, 100), (50, 50))
+		),
+		(gros_triangle, 
+			((0, 0), (100, 0), (50, 50))
+		)
+	)
+)
+\end{verbatim}
+
+
+État final:\\
+\begin{verbatim}
+(
+	(),														
+	(),														
+	(													   
+		(gros_triangle,
+			((0, 0), (0, 100), (50, 50))
+		),
+		(gros_triangle, 
+			((0, 0), (100, 0), (50, 50))
+		),
+		...,
+		(moyen_triangle,
+			((100, 50), (100, 100), (50, 100))
+		)
+	)
+)
+\end{verbatim}
+
+			\subsection{Système de production}
+
+		Les règles du système de production traitent des contraintes que les pièces placées doivent respecter, mais ne rentrent pas dans le déroulement de la recherche de placement des pièces. Il est très difficile pour un problème de ce type de définir un ensemble de règles précises, puisque celles-ci diffèrent en fonction du modèle à résoudre.\\
+		Les règles concernant les ensembles de définition des coordonnées sont les premières à être affectées par ce problème. Ainsi il convient d'adapter à chaque cas ces règles. De plus, le modèle évoluant constamment, il n'est pas possible de définir ces règles, car elles vont évoluer en même temps que le modèle. \\
+Une règle simple $(R0)$ pour ceci peut être que chaque point d'une pièce dans $PiecesPlacees$ à un état $N$ doit
+être dans la surface de $Modele$ à un état $N-1$.\\
+
+Les autres règles, plus simples à définir, sont:
+	\begin{itemize}
+		\item $(R1)$ Le nombre de pièces est compris entre 0 et 7;
+		\item $(R2)$ Le nombre de PiecesPlacees est compris entre 0 et 7;
+		\item $(R3)$ L'aire du Modele à un état $N$ doit être égal à l'aire du $Modele$ à
+l'état $N-1$ moins l'aire de la dernière pièce dans $PiecesPlacees$;
+		\item $(R4)$ $Modele$ est vide si $Pieces$ est vide et que le nombre de pièces dans $PiecesPlacees$
+est égal à 7;
+		\item $(R5)$ Le nombre de pièces est égal à 7 moins le nombre de pièces dans $PiecesPlacees$;
+		\item $(R6)$ Le nombre de pièces dans $PiecesPlacees$ est égal à 7 moins le nombre de pièces dans $Pieces$.
+	\end{itemize}
 	
 	\chapter{Résultats obtenus}
 	
