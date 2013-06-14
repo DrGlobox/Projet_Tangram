@@ -194,6 +194,8 @@ find_common_point([[_,_],[X,Y]],[[_,_],[X,Y]],[X,Y]):-!.
 find_common_point(_,_,[0,0]).
 
 
+%retourne_forme(+PieceARetourner, +Sens, -PieceRetournee)
+%retourne le sens de lecture de la forme (les arêtes)
 retourne_forme(Piece,1,Piece):-!.
 retourne_forme([],-1,[]):-!.
 retourne_forme([[P1,P2]|Reste],-1,Result):-
@@ -201,10 +203,15 @@ retourne_forme([[P1,P2]|Reste],-1,Result):-
     ajout_fin(R,[P2,P1],Result).
 
 
+%ajout_fin(+Liste, +Element, +NewListe)
+% ajoute un élément à la fin d'une liste
 ajout_fin([],A,[A]):-!.
 ajout_fin([T|Reste],A,[T|Result]):-
     ajout_fin(Reste,A,Result).
 
+
+%search_sens_forme(+Forme,+Arete,-Sens)
+%vérifie si l'arête est lue dans le même sens que la forme
 search_sens_forme([A|_],Arete,Sens):-
     teste_aretes_egales(A,Arete),
     get_sens(A,Arete,Sens),!.
@@ -221,6 +228,8 @@ teste_aretes_egales([P1,P2],[P2,P1]):-!.
 teste_aretes_egales(_,_):-fail.
 
 
+%search_commmon_arete(+Pattern,+Piece,-Arete)
+%retourne une arête commune si elle existe
 search_commmon_arete([Arete|_],Piece,Arete):-
     search_arete_in_forme(Arete,Piece),!.
 
@@ -235,6 +244,8 @@ search_arete_in_forme(Arete,[_|RPiece]):-
     search_arete_in_forme(Arete,RPiece),!.
 
 
+%remove_arete_patterns(+Forme,+Arete,-NewForme)
+%supprime une arête d'une forme
 remove_arete_patterns(_,[],[]):-!.
 remove_arete_patterns(A,[A|Reste],Reste):-!.
 remove_arete_patterns(A,[B|Reste],[B|Result]):-
