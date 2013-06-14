@@ -9,8 +9,14 @@
 %       New_patterns la nouvelle liste des sous patterns obtenue 
 %par soustraction du deuxieme para au premier
 
+<<<<<<< HEAD
 soustraction([Patterns], Piece, [NewPatterns4]):-
 	write_ln(Patterns), write_ln(Piece),
+=======
+
+
+soustraction([Patterns], Forme, [NewPatterns4]):-
+>>>>>>> db0b81aad35827443c91928cb1596bc853988fe0
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
     tools:liste_all_couple_aretes(Piece,CoupleAretePiece),
     search_commmon_arete(CoupleAretePatterns,CoupleAretePiece,Arete),
