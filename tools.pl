@@ -50,6 +50,8 @@ aretes_piece([T|Reste],[[T,D]|Aretes]):-aretes([T|Reste],Aretes),dernier([T|Rest
 aretes_pattern([],[]).
 aretes_pattern([Pattern|Reste],[Aretes|Resutat]):-aretes_pattern(Reste,Resutat), aretes_piece(Pattern,Aretes).
 
+%membre(+Element, -Liste)
+%redéfinit le prédicat member
 membre(X,[X|_]):-!.
 membre(X,[_|R]):-membre(X,R).
 
@@ -68,10 +70,12 @@ rotate_point([Xp,Yp],[Xo,Yo],Angle,[Xr,Yr]):-
     Xrr is X * Cos - Y * Sin, Xr is round(Xrr+Xo),
     Yrr is X * Sin + Y * Cos, Yr is round(Yrr+Yo).
 
-
+%getAngleDegre(+Radian, -Degre)
 getAngleDegre(Radian, Degre):-
     Degre is (180 * (Radian / pi)).
 
+%find_angle(+Arete1,+Arete2,-Angle)
+% reçoit deux arêtes et retourne l'angle entre les deux
 find_angle([[Ptx1,Pty1],[Ptx2,Pty2]],[[Ptx3,Pty3],[Ptx4,Pty4]],Angle):-
     Vx1 is Ptx2 - Ptx1,
     Vy1 is Pty2 - Pty1,
@@ -97,6 +101,8 @@ translate_piece([[Pox,Poy]|Reste],[Ax,Ay],[[Ptx,Pty]|Resultat]):-
     translate_piece(Reste,[Ax,Ay],Resultat),
     Ptx is Pox + Ax, Pty is Poy + Ay.
 
+%polaire(+coord_cartésienne, +origine_cart, -Téta_polaire, -Dist_polaire)
+%retourne les coordonnées polaires d'un point donné dans un repère cartésien
 polaire([X,Y],[Ox,Y],Teta,D):-
     X > Ox,!, Teta is 0,
     distance([X,Y],[Ox,Y],D).
@@ -109,11 +115,14 @@ polaire([X,Y],[Ox,Oy],Teta,D):-
     Tmp is (Nx  + sqrt( (Nx*Nx) + (Ny*Ny) )),
     Teta is 2 * atan( Ny / Tmp).
 
+%unpolaire(-coord_cart, -origine_cart, +Téta_polaire, +Dist_polaire)
+%retourne les coordonnées cartésiennes en fonction des coordonnées polaires
 unpolaire([X,Y],[Ox,Oy],Teta,D):-
     X is round(D * cos(Teta) + Ox),
     Y is round(D * sin(Teta) + Oy).
 
-
+%goodTeta(+TetaB, +TetaC, -TetaNC)
+%choisit le bon angle parmis deux
 goodTeta(TetaB,TetaC,TetaNC):-
     TetaB > TetaC,!,
     TetaBC is TetaB - TetaC,
@@ -142,6 +151,9 @@ symetrie_piece([[Px,Py]|Reste],[[PAx,PAy],[PBx,PBy]],[[Pnx,Pny]|Resultat]):-
     symetrie([Px,Py],[[PAx,PAy],[PBx,PBy]],[Pnx,Pny]).
 
 
+%liste_all_couple_aretes(+AretesPattern,-CouplesAretes)
+%à partir des arêtes d'une forme, retourne des couples d'arêtes
+%rq: fonctione aussi pour retourner des couples de points à partir d'une forme
 liste_all_couple_aretes(AretesPattern,CouplesAretes):-
     getListeCoupleAretes(AretesPattern,CouplesAretes).
 
@@ -155,6 +167,8 @@ getCoupleAretes([Arete1,Arete2|Rest],[[Arete1,Arete2]|ListeReturn]):-
 
 
 
+%find_good_axe_rotation(+Aretes1_pieces, +Aretes2_pieces, +Aretes1_pattern ,+Aretes2_pattern, -Angle)
+%retourne l'angle entre les arêtes du modèle et de la piece si ils sont égaux
 find_good_axe_rotation([[PtF1A1,PtF2A1],[PtF1A2,PtF2A2]],[[PtD1A1,PtD2A1],[PtD1A2,PtD2A2]],Angle):-
     distance(PtF1A1,PtF2A1,DF1), distance(PtF1A2,PtF2A2,DF2),
     distance(PtD1A1,PtD2A1,DD1), distance(PtD1A2,PtD2A2,DD2),
@@ -168,7 +182,8 @@ find_good_axe_rotation([[PtF1A1,PtF2A1],[PtF1A2,PtF2A2]],[[PtD1A1,PtD2A1],[PtD1A
 find_good_axe_rotation(_,_,0).
 
 
-
+%find_common_point(+Arete1, +Arete2, -Point)
+%cherche un point commun entre deux arêtes et le retourne s'il existe
 find_common_point([[X,Y],[_,_]],[[X,Y],[_,_]],[X,Y]):-!.
 find_common_point([[X,Y],[_,_]],[[_,_],[X,Y]],[X,Y]):-!.
 find_common_point([[_,_],[X,Y]],[[X,Y],[_,_]],[X,Y]):-!.
