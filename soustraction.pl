@@ -2,23 +2,21 @@
 :-use_module(tools).
 :-use_module(tangram).
 
-%soustraction(Patterns, Forme, New_patterns) 
+%soustraction(Patterns, Piece, New_patterns) 
 %avec   Patterns la liste des sous patterns contenant chacun 
 %la liste des points qui les delimitent
-%       Forme la liste des points qui delimitent la forme
+%       Piece la liste des points qui delimitent la forme
 %       New_patterns la nouvelle liste des sous patterns obtenue 
 %par soustraction du deuxieme para au premier
 
-
-
-soustraction([Patterns], Forme, [NewPatterns4]):-
-	write_ln(Patterns), write_ln(Forme),
+soustraction([Patterns], Piece, [NewPatterns4]):-
+	write_ln(Patterns), write_ln(Piece),
     tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
-    tools:liste_all_couple_aretes(Forme,CoupleAreteForme),
-    search_commmon_arete(CoupleAretePatterns,CoupleAreteForme,Arete),
-    search_sens_forme(CoupleAreteForme,Arete,Sens),
-    retourne_forme(CoupleAreteForme,Sens,CoupleAreteForme1),
-    mix_pattern_forme(CoupleAretePatterns,CoupleAreteForme1,Arete,Mixed),
+    tools:liste_all_couple_aretes(Piece,CoupleAretePiece),
+    search_commmon_arete(CoupleAretePatterns,CoupleAretePiece,Arete),
+    search_sens_forme(CoupleAretePiece,Arete,Sens),
+    retourne_forme(CoupleAretePiece,Sens,CoupleAretePiece1),
+    mix_pattern_forme(CoupleAretePatterns,CoupleAretePiece1,Arete,Mixed),
     clean_double_arete(Mixed,CleanedMixed),
     arete_to_point(CleanedMixed,NewListPoint),
     clean_double_point(NewListPoint,NewPatterns1),
@@ -26,7 +24,7 @@ soustraction([Patterns], Forme, [NewPatterns4]):-
 
 
 
-retourne_forme(Forme,1,Forme):-!.
+retourne_forme(Piece,1,Piece):-!.
 retourne_forme([],-1,[]):-!.
 retourne_forme([[P1,P2]|Reste],-1,Result):-
     retourne_forme(Reste,-1,R),
@@ -109,7 +107,6 @@ clean_first_last_double_point(L,L).
 
 arete_to_point([],[]):-!.
 arete_to_point([[[Pt1,Pt2],A2]|Reste],[[Pt1,Pt2]|NewPatterns]):-
-    writeln('------------->'),
     arete_to_point2([[[Pt1,Pt2],A2]|Reste],NewPatterns).
 
 arete_to_point2([[Pt1,Pt2],[Pt3,Pt4]],[[X,Y]]):-!,
@@ -140,10 +137,10 @@ remove_arete_patterns(A,[B|Reste],[B|Result]):-
     remove_arete_patterns(A,Reste,Result).
 
 
-mix_pattern_forme([A|Reste],CoupleForme,A,[A|NewCouple]):-!,
-        add_forme_patterns(CoupleForme,Reste,NewCouple).
-mix_pattern_forme([APatterns|Reste],Forme,A,[APatterns|Retour]):-
-    mix_pattern_forme(Reste,Forme,A,Retour).
+mix_pattern_forme([A|Reste],CouplePiece,A,[A|NewCouple]):-!,
+        add_forme_patterns(CouplePiece,Reste,NewCouple).
+mix_pattern_forme([APatterns|Reste],Piece,A,[APatterns|Retour]):-
+    mix_pattern_forme(Reste,Piece,A,Retour).
 
 
 
@@ -152,18 +149,18 @@ add_forme_patterns([A|Reste],Pattern,[A|Result]):-
     add_forme_patterns(Reste,Pattern,Result).
 
 
-search_commmon_arete([Arete|_],Forme,Arete):-
-    search_arete_in_forme(Arete,Forme),!.
+search_commmon_arete([Arete|_],Piece,Arete):-
+    search_arete_in_forme(Arete,Piece),!.
 
-search_commmon_arete([_|Reste],Forme,Arete):-
-    search_commmon_arete(Reste,Forme,Arete).
+search_commmon_arete([_|Reste],Piece,Arete):-
+    search_commmon_arete(Reste,Piece,Arete).
 
     
 search_arete_in_forme(_,[]):-!,fail.
-search_arete_in_forme(Arete,[AForme|_]):-
-    teste_aretes_egales(Arete,AForme),!.
-search_arete_in_forme(Arete,[_|RForme]):-
-    search_arete_in_forme(Arete,RForme),!.
+search_arete_in_forme(Arete,[APiece|_]):-
+    teste_aretes_egales(Arete,APiece),!.
+search_arete_in_forme(Arete,[_|RPiece]):-
+    search_arete_in_forme(Arete,RPiece),!.
 
 teste_aretes_egales([P2,P1],[P2,P1]):-!.
 teste_aretes_egales([P1,P2],[P2,P1]):-!.

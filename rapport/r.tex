@@ -1,0 +1,94 @@
+\documentclass[a4paper, 11pt]{report}
+\usepackage{appendix}
+
+\begin{document}
+\begin{appendices}
+
+    \chapter{Prédicat soustraction}
+    \begin{verbatim}
+    % file : soustraction.pl
+    soustraction([Patterns], Piece, [NewPatterns]):-
+
+    tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
+    tools:liste_all_couple_aretes(Piece,CoupleAretePiece),
+
+    search_commmon_arete(CoupleAretePatterns,CoupleAretePiece,Arete),
+    search_sens_forme(CoupleAretePiece,Arete,Sens),
+    retourne_forme(CoupleAretePiece,Sens,CoupleAretePiece1),
+
+    mix_pattern_forme(CoupleAretePatterns,CoupleAretePiece1,Arete,Mixed),
+    clean_double_arete(Mixed,CleanedMixed),
+
+    arete_to_point(CleanedMixed,NewListPoint),
+    clean_double_point(NewListPoint,NewPatterns1),
+    clean_first_last_double_point(NewPatterns1,NewPatterns).
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{Patterns} : variable représentant le modèle actuel à réaliser;
+        \item \textbf{Piece} : variable représentant la pièce positionné en fonction du modèle;
+        \item \textbf{NewPatterns} : variable représentant le nouveau modèle.
+    \end{itemize}
+
+\chapter{Prédicat placePiece}
+    \begin{verbatim}
+
+% file : placePiece.pl
+placePiece(Piece,Patterns,ReturnPiece):-
+    test_placement_patterns_exact_match(Piece,Patterns,Placement),
+    positionne(Piece,Placement,NewPiece),
+    test_all_placement(NewPiece,Patterns,Placement,ReturnPiece).
+
+placePiece(Piece,Patterns,ReturnPiece):-
+    test_placement_patterns_angle_match(Piece,Patterns,Placement),
+    positionne(Piece,Placement,[Axe1,Axe2],NewPiece),
+    test_placement(NewPiece,Patterns,[Axe1,Axe2],ReturnPiece).
+
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{Piece} : variable représentant la pièce à placer;
+        \item \textbf{Patterns} : variable représentant le modèle où placer la pièce;
+        \item \textbf{ReturnPiece} : variable représentant la pièce correctement placée.
+    \end{itemize}
+
+
+\chapter{Prédicat essai_piece}
+    \begin{verbatim}
+
+% file : main.pl
+essai_piece(_,[[]],_,_):-!.
+essai_piece([], _, _, _) :- !.
+essai_piece(_, [], Solution, _) :- !, 
+    affiche_resultat(Solution).
+
+essai_piece(_, _, _, 0) :- 
+    write_ln('\tBout de la branche atteint'), !, fail.
+
+essai_piece([Piece|PiecesRestantes], Pattern, [[Piece, Placements]|PiecesRetenues], _) :-
+    points_piece(Piece, PointsPiece),
+    write('Essai de la pièce '),
+    write(Piece),
+    placePiece(PointsPiece, Pattern, Placements),
+    retirer_piece(PiecesRestantes, Pattern, Placements, PiecesRetenues).
+
+essai_piece([PieceNonUtilisee|PiecesRestantes], Pattern, PiecesRetenues, N) :- 
+    append(PiecesRestantes, [PieceNonUtilisee], Pieces), N1 is N-1,
+    write_ln(' -> la pièce est mise de côté pour le moment'),
+    essai_piece(Pieces, Pattern, PiecesRetenues, N1).  
+    
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{ListePiece} : variable représentant la liste des pièces à placer;
+        \item \textbf{Pattern} : variable représentant le modèle à réaliser;
+        \item \textbf{PiecesRetenues} : variable représentant la liste des pièces placées;
+        \item \textbf{N} : variable représentant la profondeur maximale de l'arbre de réalisation.
+    \end{itemize}
+
+
+
+
+\end{appendices} 
+\end{document}
+
