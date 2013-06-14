@@ -222,7 +222,8 @@ n'ayant plus de fils. Dans ce cas, l'algorithme effectue du "backtracking" et pe
 		Comme en géométrie où une figure est définie par un ensemble de points, en Prolog, la représentation des figures se structure selon une liste de points, ces derniers étant ordonnés de façon à ce que deux points l'un à coté de l'autre dans la liste forment une arête sur la figure. Plus simplement, les points sont placés dans l'ordre. Bien entendu, le couple formé par le premier et le dernier point représente également une arête.\\
 		Les pièces sont donc représentées par des listes de points, chacune de ces pièces ayant un point qui est positionné à l'origine du repère. Grâce à cette modélisation, lors du placement des pièces sur un modèle, il suffira de transformer la figure par rotation ou par translation vers sa position.\\
 		Les modèles sont un peu plus complexes à modéliser car ils peuvent être divisés en plusieurs parties pour certaines configurations. Aussi, comme il n'est pas possible de prévoir la position des pièces à l'avance, il se peut que le positionnement d'une pièce dans le modèle forme deux nouveaux sous modèles. Il a donc été choisi de modéliser un modèle suivant une liste de figures. 
-
+		
+		\vspace*{1cm}
 
         \begin{center}
             \includegraphics[width=5cm]{representation_sousfigure}\\
@@ -351,6 +352,8 @@ est égal à 7;
 	
 	\chapter*{Conclusion}
 	\addcontentsline{toc}{chapter}{Conclusion}
+	
+	Le projet de résolution du Tangram a pu être mené à son terme en partie puisqu'il permet de résoudre certain modèles simples mais pas de plus complexes. Il a cependant été bénéfique pour l'ensemble des membres du groupes puisqu'il a permis une meilleure familiarisation avec le langage Prolog. Même si de nombreuses problèmes ont été rencontrées du fait de la difficulté de ce casse-tête, un résultat fonctionnel a été construit. Le seul regret possible est que le modèle le plus répandu du carré n'ait pas pu être résolu en totalité. Cependant, le temps passé sur ce projet n'aura pas été perdu puisqu'il aurait permis à chacun de faire ses preuves.
 	
 	
 	
