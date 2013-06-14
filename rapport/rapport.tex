@@ -5,16 +5,15 @@
 
 
 \input{modele}
-
-	%\title{\vspace{5cm}Nascar \\ Rapport de projet \\ LO41 \\ \ \\}
-	%\date{automne 2012\\ \ \\ \vspace*{3cm}
-	%\includegraphics[width=4cm]{logo_utbm.png}
-	%}
-	%\author{Paul Locatelli - Pierre Rognon \\ \ \\ \ \\ Université de Technologies de Belfort-Montbéliard\\ \ \\}
 	
-	\titleformat{\chapter}[hang]{\bf\huge}{\thechapter}{2pc}{}     
+	\titleformat{\chapter}[hang]{\bf\huge}{\thechapter}{2pc}{} 
+	\renewcommand{\appendixpagename}{Annexes}  
+	\renewcommand{\appendixtocname}{Annexes}    
+  
 
 \begin{document}
+
+
 
 \makeatletter
 	\def\clap#1{\hbox to 0pt{\hss #1\hss}}%
@@ -60,7 +59,7 @@
 	\includegraphics[width=5cm]{logo_UTBM.jpg}
 \end{center}
 
-\bas{}{Automne 2012}{}
+\bas{}{Printemps 2013}{}
 }%
 \cleardoublepage
 }
@@ -77,7 +76,7 @@
 \location{Belfort}\blurb{}
 \makeatother
 \title{Projet de résolution d'un tangram}
-\author{\small{Adrien \bsc{Berthet} Paul \bsc{Locatelli} et Pierre \bsc{Rognon}}}
+\author{\small{Adrien \bsc{Berthet}, Paul \bsc{Locatelli} et Pierre \bsc{Rognon}}}
 \blurb{%
 	\textbf{IA41 - Concepts fondamentaux en Intelligence Artificielle et langages dédiés}\\
 	Université de Technologie de Belfort-Montbéliard
@@ -161,7 +160,7 @@ L'analyse de ce problème constitue une partie prépondérante dans la tentative
 		Le second problème mathématique que la résolution exigeait de résoudre est la soustraction d'une forme au modèle. En effet, la solution la plus simple résidait dans le fait de placer une forme dans le modèle pour ensuite renvoyer un nouveau problème et recommencer le casse-t\^ete la forme placée en moins avec le nouveau modèle.\\
 		Ce problème imposait donc plusieurs sous-étapes pour pouvoir retourner de façon efficace le nouveau modèle. Ces sous-étapes sont la découverte des tous les points du nouveau modèle, puis la suppression d'éventuels points qui seraient inutiles. Une précision importante à apporter est le fait qu'il faut conserver l'ordre des points du modèle afin de conserver la forme voulue. Le travail nécessite donc de passer non pas seulement par des points mais par des arêtes.\\
 		Le fait d'utiliser des arêtes a permis de réunir les deux sous-étapes puisque la suppression de points superflus se fait tout au long de la découverte des nouveaux points. Malgré tout, plusieurs étapes sont nécessaire pour la découverte du nouveau modèle.\\ \ \\
-		La première étape, tout comme lors de l'étape du placement d'une pièce, est de trouver une arête commune à la pièce et au modèle. La différence ici est que la pièce a un placement déjà fixé, on sait donc d'avance l'arête qui sera trouvée comme correspondant au modèle et à la forme. Dans le cas où plusieurs arêtes correspondent, l'algorithme prend simplement la première qui arrive puisque le choix de l'arête n'a pas d'importance.\\
+		La première étape, tout comme lors de l'étape du placement d'une pièce, est de trouver une arête commune à la pièce et au modèle. La différence étant qu'ici, l'algorithme est sûr de trouver au moins une arête commune. Dans le cas où plusieurs arêtes correspondent, l'algorithme prend simplement la première qui arrive puisque le choix de l'arête n'a pas d'importance.\\
 		Un fois cette arête commune choisie, on doit vérifier si le sens de la forme est la même que le sens du modèle. En effet, lors de la recherche d'une arête commune, on cherche sans distinction si l'arête est présentée dans le même sens ou non. Par exemple, si sur la forme l'arête a pour coordonnées $(0,100)$ et sur le modèle les coordonnées $(100,0)$, il faut "retourner" les arêtes afin que les coordonnées correspondent.\\
 		Une fois la pièce à insérer mise en bonne forme, ses arêtes sont ajoutées sans test dans le modèle juste après l'arête commune entre la pièce et la forme. Ainsi, les arêtes de la pièces cont ajoutées au bon endroit dans le modèle.\\
 		
@@ -312,25 +311,146 @@ Une règle simple $(R0)$ pour ceci peut être que chaque point d'une pièce dans
 
 Les autres règles, plus simples à définir, sont:
 	\begin{itemize}
-		\item $(R1)$ Le nombre de pièces est compris entre 0 et 7;
-		\item $(R2)$ Le nombre de PiecesPlacees est compris entre 0 et 7;
-		\item $(R3)$ L'aire du Modele à un état $N$ doit être égal à l'aire du $Modele$ à
-l'état $N-1$ moins l'aire de la dernière pièce dans $PiecesPlacees$;
+		\item $(R1)$ Le nombre de pièces dans $Pieces$ est compris entre 0 et 7;
+		\item $(R2)$ Le nombre de pièces dans $PiecesPlacees$ est compris entre 0 et 7;
+		\item $(R3)$ L'aire du $Modele$ à un état $N$ doit être égal à l'aire du $Modele$ à l'état $N-1$ moins l'aire de la dernière pièce dans $PiecesPlacees$;\\
+		Remarque: cette règle n'a pas été développée mais pourrait l'être à l'avenir.
 		\item $(R4)$ $Modele$ est vide si $Pieces$ est vide et que le nombre de pièces dans $PiecesPlacees$
 est égal à 7;
 		\item $(R5)$ Le nombre de pièces est égal à 7 moins le nombre de pièces dans $PiecesPlacees$;
 		\item $(R6)$ Le nombre de pièces dans $PiecesPlacees$ est égal à 7 moins le nombre de pièces dans $Pieces$.
 	\end{itemize}
 	
-	\chapter{Résultats obtenus}
+	\chapter{Résultats obtenus et exemples}
 	
-	De nombreux problèmes ayant été rencontrés durant le projet, les résultats obtenus n'indiquent pas une résolution totale de différents modèles. Ceci est d\^u au fait des différentes difficultés apparues sur les algorithmes mathématiques touchant à la géométrie.
+	De nombreux problèmes ayant été rencontrés durant le projet, les résultats obtenus n'indiquent pas une résolution totale de différents modèles. Ceci est d\^u au fait des différentes difficultés apparues sur les algorithmes mathématiques touchant à la géométrie.\\
+	Malgré tout, sur des modèles simples, l'ensemble des prédicats fonctionnent ensemble et parviennent à s'articuler pour fournir des résultats. Le logiciel et donc fonctionnel dans son ensemble.\\ \ \\
+	
+	Les deux Tangrams suivants sont résolus sans problèmes par le logiciel et sont issus du modèle carré classique connu de tous:
+	\begin{itemize}
+		\item Cas du demi carré avec deux triangles à place:
+		\begin{center}
+			\includegraphics[width=12cm]{resultat_1}\\
+		\end{center}
+		\item Cas plus complexe avec trois triangles à placer:
+		\begin{center}
+			\includegraphics[width=12cm]{resultat_2}
+		\end{center}
+	\end{itemize}
+	
+	\chapter{Problèmes rencontrés}
+	
+	Comme déjà abordé tout au long de ce rapport, de nombreux problèmes ont été rencontrés lors du projet. La première des difficultés était que le problème n'a que très peu été traité jusqu'à aujourd'hui et qu'il fallait donc partir de zéro au niveau des idées de conception de l'IA.\\
+	Des sous-problèmes ont donc rapidement été isolés, cependant, c'est pendant la résolution de ces différents problèmes que les plus grosses difficultés ont été rencontrées, notamment pour les parties mathématiques.\\
+	Ces difficultés ont été assez rapidement surmontées algorithmiquement, mais lors du passage en Prolog, de nouvelles difficultés ont été rencontrées. En effet, la formalisation de problèmes géométriques dans ce langage ne nous a pas apparu aisé. Il reste donc à ce jour certains cas où les prédicats liés à la géométrie (particulièrement pour le placement) qui ne fonctionnent pas. Ceci est dû au fait que de nombreux différents cas étaient à gérer dont de nombreux qui étaient isolés. Ces cas là n'ont donc pas tous été traités, soit parce qu'ils n'ont pas été découverts, soit parce qu'aucune solution n'a été trouvée.\\
+	Du fait de ces difficultés, une interface graphique n'a pas pu être développée par manque de temps. Les résultats sont donc retournés en ligne de commande ce qui n'empêche pas le bon fonctionnement du programme.
+	
+	\chapter{Améliorations possibles}
+	
+	Comme le programme n'est pas en mesure de gérer tous les cas, de nombreuses améliorations pourraient encore \^etre apportées, en particulier pour la gestion des nombreux cas particuliers. Aussi, comme il en a été question plus t\^ot dans ce rapport, la vérification par l'aire, c'est-à-dire en comparant l'aire du modèle avec la somme des aires des figures restant à \^etre placées, nous paraissait une méthode intéressante à implémenter. Ceci éviterait de descendre dans des branches vouées à l’échec lors de l'exécution de l'algorithme de recherche d'une solution.
+	
+	\chapter*{Conclusion}
+	\addcontentsline{toc}{chapter}{Conclusion}
+	
+	
 	
 	
 		
 	\newpage	
 		
 	\tableofcontents
+
+	\begin{appendices}
+
+    \chapter{Prédicat soustraction}
+    \begin{verbatim}
+    % file : soustraction.pl
+    soustraction([Patterns], Piece, [NewPatterns]):-
+
+    tools:liste_all_couple_aretes(Patterns,CoupleAretePatterns),
+    tools:liste_all_couple_aretes(Piece,CoupleAretePiece),
+
+    search_commmon_arete(CoupleAretePatterns,CoupleAretePiece,Arete),
+    search_sens_forme(CoupleAretePiece,Arete,Sens),
+    retourne_forme(CoupleAretePiece,Sens,CoupleAretePiece1),
+
+    mix_pattern_forme(CoupleAretePatterns,CoupleAretePiece1,Arete,Mixed),
+    clean_double_arete(Mixed,CleanedMixed),
+
+    arete_to_point(CleanedMixed,NewListPoint),
+    clean_double_point(NewListPoint,NewPatterns1),
+    clean_first_last_double_point(NewPatterns1,NewPatterns).
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{Patterns} : variable représentant le modèle actuel à réaliser;
+        \item \textbf{Piece} : variable représentant la pièce positionné en fonction du modèle;
+        \item \textbf{NewPatterns} : variable représentant le nouveau modèle.
+    \end{itemize}
+
+\chapter{Prédicat placePiece}
+    \begin{verbatim}
+
+% file : placePiece.pl
+placePiece(Piece,Patterns,ReturnPiece):-
+    test_placement_patterns_exact_match(Piece,Patterns,Placement),
+    positionne(Piece,Placement,NewPiece),
+    test_all_placement(NewPiece,Patterns,Placement,ReturnPiece).
+
+placePiece(Piece,Patterns,ReturnPiece):-
+    test_placement_patterns_angle_match(Piece,Patterns,Placement),
+    positionne(Piece,Placement,[Axe1,Axe2],NewPiece),
+    test_placement(NewPiece,Patterns,[Axe1,Axe2],ReturnPiece).
+
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{Piece} : variable représentant la pièce à placer;
+        \item \textbf{Patterns} : variable représentant le modèle où placer la pièce;
+        \item \textbf{ReturnPiece} : variable représentant la pièce correctement placée.
+    \end{itemize}
+
+
+	\chapter{Prédicat essai\_piece}
+	
+    \begin{verbatim}
+
+% file : main.pl
+essai_piece(_,[[]],_,_):-!.
+essai_piece([], _, _, _) :- !.
+essai_piece(_, [], Solution, _) :- !, 
+    affiche_resultat(Solution).
+
+essai_piece(_, _, _, 0) :- 
+    write_ln('\tBout de la branche atteint'), !, fail.
+
+essai_piece([Piece|PiecesRestantes], Pattern, [[Piece, Placements]|PiecesRetenues], _) :-
+    points_piece(Piece, PointsPiece),
+    write('Essai de la pièce '),
+    write(Piece),
+    placePiece(PointsPiece, Pattern, Placements),
+    retirer_piece(PiecesRestantes, Pattern, Placements, PiecesRetenues).
+
+essai_piece([PieceNonUtilisee|PiecesRestantes], Pattern, PiecesRetenues, N) :- 
+    append(PiecesRestantes, [PieceNonUtilisee], Pieces), N1 is N-1,
+    write_ln(' -> la pièce est mise de côté pour le moment'),
+    essai_piece(Pieces, Pattern, PiecesRetenues, N1).  
+    
+    \end{verbatim}
+
+    \begin{itemize}
+        \item \textbf{ListePiece} : variable représentant la liste des pièces à placer;
+        \item \textbf{Pattern} : variable représentant le modèle à réaliser;
+        \item \textbf{PiecesRetenues} : variable représentant la liste des pièces placées;
+        \item \textbf{N} : variable représentant la profondeur maximale de l'arbre de réalisation.
+    \end{itemize}
+
+
+\end{appendices} 
+
+
+
+
 		
 \end{document}
 
