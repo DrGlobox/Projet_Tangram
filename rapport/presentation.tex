@@ -205,11 +205,119 @@
 
 	\section{Représentation informatique du problème}
 	
-\begin{frame}{Représentation informatique du problème}
+		\subsection{Structure de données}
+	
+\begin{frame}{Structure de données}
+
+	\begin{itemize}
+		\item représentation des figures dans un repère orthonormé;
+		\item coordonnées réunies en points;
+		\item figure représentée par une liste de points;
+		\item ordre des points importants;
+		\item modèle structuré par une liste de figures.
+	\end{itemize}
+
+\end{frame}
+
+		\subsection{Espace d'états}
+		
+\begin{frame}{Espace d'états}
+
+	\begin{columns}[c]
+		\begin{column}{4cm}
+    		\includegraphics[width=5cm]{representation_sousfigure}
+  		\end{column}
+		\begin{column}{6.5cm}
+			Chaque état contient:
+			\begin{itemize}
+				\item les pièces à placer;
+				\item les coordonnées du modèle à remplir;
+				\item les pièces placées.
+			\end{itemize}
+  		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{Espace d'états}
+
+	\begin{itemize}
+		\item $Pieces$ défini dans l'ensemble des pièces disponibles;
+		 \item $PiecesPlacees$ défini de la même manière;
+		 \item $Modele$ défini par des points compris dans l'espace des coordonnées de base.
+	\end{itemize}
+
+\end{frame}
+
+		
+		\subsection{Système de production}
+		
+\begin{frame}{Système de production}
+
+	\begin{itemize}
+		\item contraintes sur les pièces placées;
+		\item règles différant de la configuration du Tangram;
+		\item néanmoins, règles communes concernant les coordonnées:\\
+		chaque point d'une pièce dans $PiecesPlacees$ doit être dans la surface de $Modele$ à un état antérieur.
+	\end{itemize}
+
+\end{frame}
+
+	\section{Résultat obtenus}
+	
+		\subsection{Avancement de la résolution}
+	
+\begin{frame}{Avancement de la résolution}
+
+	\begin{itemize}
+		\item résolution totale non obtenue;
+		\item dû à des problèmes sur les parties géométriques du Tangram;
+		\item fonctionnement effectif sur des cas simples
+	\end{itemize}
+	
+\end{frame}
+
+		\subsection{Exemples}
+
+\begin{frame}{Des exemples}
+
+	Les deux premières pièces du Tangram "carré":\\ \ \\ \ \\
+	\includegraphics[width=10cm]{resultat_1}
+
+\end{frame}
+
+\begin{frame}{Des exemples}
+
+	Un cas dérivé avec trois triangles:\\ \ \\ \ \\
+	\includegraphics[width=10cm]{resultat_2}
+
+\end{frame}
+
+	\section{Problèmes rencontrés}
+	
+\begin{frame}{Problèmes rencontrés}
+
+	\begin{itemize}
+		\item peu de données sur le problème;
+		\item problèmes d'ordre géométriques difficiles à modéliser;
+		\item de nombreux cas particuliers;
+		\item un choix de modélisation initial discutable finalement.
+	\end{itemize}
 
 \end{frame}
 
 
+	\section{Conclusion}
+	
+\begin{frame}{Conclusion}
+
+	\begin{itemize}
+		\item projet intéressant sur le plan du sujet;
+		\item des difficultés mais un résultat satisfaisant;
+		\item mise en pratique du Prolog intéressante.
+	\end{itemize}
+
+\end{frame}
 	
 
 \end{document}
